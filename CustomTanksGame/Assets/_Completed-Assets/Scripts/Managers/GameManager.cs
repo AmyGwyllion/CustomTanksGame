@@ -10,7 +10,7 @@ namespace Complete
         public int m_NumRoundsToWin = 5;            // The number of rounds a single player has to win to win the game.
         public float m_StartDelay = 3f;             // The delay between the start of RoundStarting and RoundPlaying phases.
         public float m_EndDelay = 3f;               // The delay between the end of RoundPlaying and RoundEnding phases.
-        public CameraControl m_CameraControl;       // Reference to the CameraControl script for control during different phases.
+        //public CameraControl m_CameraControl;       // Reference to the CameraControl script for control during different phases.
         public Text m_MessageText;                  // Reference to the overlay Text to display winning text, etc.
         public GameObject m_TankPrefab;             // Reference to the prefab the players will control.
         public TankManager[] m_Tanks;               // A collection of managers for enabling and disabling different aspects of the tanks.
@@ -21,6 +21,11 @@ namespace Complete
         private WaitForSeconds m_EndWait;           // Used to have a delay whilst the round or game ends.
         private TankManager m_RoundWinner;          // Reference to the winner of the current round.  Used to make an announcement of who won.
         private TankManager m_GameWinner;           // Reference to the winner of the game.  Used to make an announcement of who won.
+
+        /*[NEW]***************************/
+        public CameraControl m_P1Camera;
+        public CameraControl m_P2Camera;
+        /*********************************/
 
 
         private void Start()
@@ -34,7 +39,7 @@ namespace Complete
 
             // Once the tanks have been created and the camera is using them as targets, start the game.
             StartCoroutine (GameLoop ());
-        }
+    }
 
 
         private void SpawnAllTanks()
@@ -61,10 +66,18 @@ namespace Complete
             {
                 // ... set it to the appropriate tank transform.
                 targets[i] = m_Tanks[i].m_Instance.transform;
+
+                //[NEW] Add personal target to main two cameras 
+                if (m_Tanks[i].m_PlayerNumber == 1) m_P1Camera.m_MyTarget = targets[i];
+                if (m_Tanks[i].m_PlayerNumber == 2) m_P1Camera.m_MyTarget = targets[i];
             }
 
             // These are the targets the camera should follow.
-            m_CameraControl.m_Targets = targets;
+            //m_CameraControl.m_Targets = targets;
+            
+            //[NEW]
+            m_P1Camera.m_Targets = targets;
+            m_P2Camera.m_Targets = targets;
         }
 
 
@@ -102,7 +115,11 @@ namespace Complete
             DisableTankControl ();
 
             // Snap the camera's zoom and position to something appropriate for the reset tanks.
-            m_CameraControl.SetStartPositionAndSize ();
+            //m_CameraControl.SetStartPositionAndSize ();
+
+            //[NEW]
+            m_P1Camera.SetStartPositionAndSize();
+            m_P2Camera.SetStartPositionAndSize();
 
             // Increment the round number and display text showing the players what round it is.
             m_RoundNumber++;

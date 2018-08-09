@@ -15,6 +15,9 @@ namespace Complete
         private Vector3 m_MoveVelocity;                 // Reference velocity for the smooth damping of the position.
         private Vector3 m_DesiredPosition;              // The position the camera is moving towards.
 
+        /*[NEW]***************************/
+        [HideInInspector] public Transform m_MyTarget;
+        /*********************************/
 
         private void Awake ()
         {
