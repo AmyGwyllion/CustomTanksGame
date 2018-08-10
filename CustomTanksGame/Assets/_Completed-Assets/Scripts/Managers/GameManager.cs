@@ -69,7 +69,8 @@ namespace Complete
 
                 //[NEW] Add personal target to main two cameras 
                 if (m_Tanks[i].m_PlayerNumber == 1) m_P1Camera.m_MyTarget = targets[i];
-                if (m_Tanks[i].m_PlayerNumber == 2) m_P1Camera.m_MyTarget = targets[i];
+                if (m_Tanks[i].m_PlayerNumber == 2) m_P2Camera.m_MyTarget = targets[i];
+
             }
 
             // These are the targets the camera should follow.

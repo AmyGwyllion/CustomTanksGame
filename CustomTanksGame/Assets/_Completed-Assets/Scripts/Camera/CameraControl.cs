@@ -16,7 +16,7 @@ namespace Complete
         private Vector3 m_DesiredPosition;              // The position the camera is moving towards.
 
         /*[NEW]***************************/
-        [HideInInspector] public Transform m_MyTarget;
+        public Transform m_MyTarget;
         /*********************************/
 
         private void Awake ()
@@ -39,6 +39,9 @@ namespace Complete
         {
             // Find the average position of the targets.
             FindAveragePosition ();
+
+            //[NEW] [DELETE LATER]
+            if(m_MyTarget!=null) m_DesiredPosition = new Vector3(m_MyTarget.position.x, transform.position.y, m_MyTarget.position.z);
 
             // Smoothly transition to that position.
             transform.position = Vector3.SmoothDamp(transform.position, m_DesiredPosition, ref m_MoveVelocity, m_DampTime);
