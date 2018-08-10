@@ -18,7 +18,8 @@ namespace Complete
         /*[NEW]***************************/
         [HideInInspector]  public Transform m_MyTarget;
         private bool m_HasMask = false;
-        GameObject m_Mask;
+        private GameObject m_MaskPivot;
+        private Transform m_Mask;
         /*********************************/
 
         private void Awake ()
@@ -28,132 +29,31 @@ namespace Complete
             //[NEW]
             foreach (Transform child in m_Camera.transform)
                 if (child.tag == "CameraMask"){
-                    m_Mask = child.gameObject;
+                    m_MaskPivot = child.gameObject;
+                    m_Mask = m_MaskPivot.transform.GetChild(0);
                     m_HasMask = true;
                 }
-            //[HERE]
+
             if (m_HasMask) {
-
-                //Put the side mask in the middle
-
-                /*
-                float x = m_Camera.rect.x;      //0
-                float y = m_Camera.rect.y;      //0
-                float w = m_Camera.rect.width;  //1
-                float h = m_Camera.rect.height; //1
-
-                
-                float ratio = h / (w / 2);
-
-                float xScale = m_Camera.orthographicSize / maskSize.x ;
-                float zScale = m_Camera.orthographicSize / maskSize.y;
-
-                Debug.Log("Plane Size: " + maskSize);
-                Debug.Log("Lossy scale" + m_Mask.transform.lossyScale);
-                Debug.Log("Local scale" + m_Mask.transform.localScale);
-                Debug.Log("Camera Rect: "+ m_Camera.orthographicSize);
-                Debug.Log("Camera Rect: " + m_Camera.transform.position);
-
-                m_Mask.transform.localScale = new Vector3(3, 1, 3);
-                m_Mask.transform.position = new Vector3 (m_Mask.transform.position.x - m_Mask.GetComponent<Renderer>().bounds.size.x / 2, m_Mask.transform.position.y + m_Mask.GetComponent<Renderer>().bounds.size.y / 2, m_Mask.transform.position.z );
-                */
-
-                /*
-                Vector3 maskSize = m_Mask.GetComponent<Renderer>().bounds.size;
-                float camHeight = m_Camera.orthographicSize * 2;
-                float camWidth = (m_Camera.orthographicSize * m_Camera.aspect)*2;
-
-                Vector3 scale = m_Mask.transform.localScale;
-
-                float xScale = Mathf.Abs (camHeight * scale.x / maskSize.x) ;
-                float yScale = 1;
-                float zScale = Mathf.Abs (camWidth * scale.z / maskSize.z) ;
-
-                Vector3 newScale = new Vector3(xScale, yScale, zScale);
-
-                Debug.Log(newScale);
-                Debug.Log(maskSize);
-
-                m_Mask.transform.localScale = newScale;
-
-                float posX = m_Mask.transform.localPosition.x;
-                float posY = m_Mask.transform.localPosition.y;
-                float posZ = m_Mask.transform.localPosition.z;
-                maskSize = m_Mask.GetComponent<Renderer>().bounds.size;
-
-                float W = Screen.width;
-                float H = Screen.height;
-
-                m_Mask.transform.localPosition = new Vector3(posX  - ( maskSize.x + m_ScreenEdgeBuffer)/2, posY, posZ );
-                */
-
-                //Camera Data
-
-                //float camHeight = m_Camera.orthographicSize;
-                //float camWidth = (m_Camera.orthographicSize * m_Camera.aspect);
-
-                /*
-                float camHeight = m_Camera.orthographicSize * 2.0f * Screen.width / Screen.height;
-                float camWidth = m_Camera.orthographicSize* m_Camera.aspect * 2.0f * Screen.width / Screen.height;
-                
-                float camHeight = m_Camera.pixelHeight;
-                float camWidth = m_Camera.pixelWidth;
-                
-                float camHeight = m_Camera.scaledPixelHeight;
-                float camWidth = m_Camera.scaledPixelWidth;
-                
-
-                //Mask data
-                Vector3 maskPos = m_Mask.transform.localPosition;
-                Vector3 maskScale = m_Mask.transform.localScale;
-                Vector3 maskSize = m_Mask.GetComponent<Renderer>().bounds.size;
-
-                //Calculate the new scale
-                Vector3 newScale = new Vector3(camHeight, 1,  camWidth/2);
-                m_Mask.transform.localScale = newScale;
-
-                maskSize = m_Mask.GetComponent<MeshFilter>().mesh.bounds.size;
-                maskScale = m_Mask.transform.localScale;
-                maskPos = m_Mask.transform.localPosition;
-                //Calculate the new position
-                m_Mask.transform.localPosition = new Vector3(maskPos.x - (maskSize.x/2), maskPos.y, maskPos.z);
-                */
-
-                /*
-                //Camera visible Area Dimensions
-                float camHeight = m_Camera.orthographicSize * 2.0f;
-                float camWidth = camHeight * (Screen.height/Screen.width);
-                Debug.Log(camWidth + "," + camHeight);
-
-                //Mask Plane Size
-                Vector3 maskSize = m_Mask.GetComponent<MeshFilter>().mesh.bounds.size;
-                Debug.Log("Mask plane size:" + maskSize);
-
-                //Mask Plane Local Scale
-                Vector3 maskScale = m_Mask.transform.localScale;
-                Debug.Log("Mask local scale:" + maskScale);
-
-                //Calculate The New Scale
-                float xScale = Mathf.Abs(camHeight * maskScale.x / maskSize.x);
-                float yScale = 1;
-                float zScale = Mathf.Abs(camWidth * maskScale.z / maskSize.z);
-
-                Vector3 newScale = new Vector3(xScale, yScale, zScale);
-                Debug.Log("New Scale:" + newScale);
-
-
-                m_Mask.transform.localScale = newScale;
-
-                Vector3 newMaskSize = m_Mask.GetComponent<MeshFilter>().mesh.bounds.size;
-                Debug.Log("New Mask Size:" + newMaskSize.z*newScale.z);
-                Debug.Log("Visible Area Dimensions: " + camWidth + "," + camHeight);
-
-
-                */
-
+                InitializeMask();
             }
         }
 
+        private void InitializeMask() {
+            ResizeMask();
+        }
+
+        private void ResizeMask() {
+            float camHeight = m_Camera.orthographicSize * 2;
+            float camWidth = camHeight * m_Camera.aspect;
+
+            Vector3 maskSize = m_Mask.GetComponent<MeshFilter>().mesh.bounds.size;
+
+            Vector3 newScale = new Vector3(camWidth / maskSize.z / 2, camHeight / maskSize.x, 1);
+
+            m_MaskPivot.transform.localScale = newScale;
+
+        }
 
         private void FixedUpdate ()
         {
@@ -163,15 +63,10 @@ namespace Complete
             // Change the size of the camera based.
             //Zoom ();
 
-            //[NEW]
-            if (m_HasMask) UpdateMask();
-        }
+            if(m_HasMask) ResizeMask();
 
-        //[NEW]
-        private void UpdateMask() {
 
         }
-
 
         private void Move ()
         {
@@ -264,13 +159,14 @@ namespace Complete
         public void SetStartPositionAndSize ()
         {
             // Find the desired position.
-            FindAveragePosition ();
+            //FindAveragePosition ();
+            //if (m_MyTarget != null) m_DesiredPosition = new Vector3(m_MyTarget.position.x, transform.position.y, m_MyTarget.position.z);
 
             // Set the camera's position to the desired position without damping.
-            transform.position = m_DesiredPosition;
+            //transform.position = m_DesiredPosition;
 
             // Find and set the required size of the camera.
-            m_Camera.orthographicSize = FindRequiredSize ();
+            //m_Camera.orthographicSize = FindRequiredSize ();
         }
     }
 }
