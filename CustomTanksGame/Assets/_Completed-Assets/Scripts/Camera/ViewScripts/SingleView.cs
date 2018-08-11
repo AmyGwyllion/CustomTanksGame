@@ -9,6 +9,7 @@ namespace Complete
         {
             m_CameraControl = cameraControl;
             m_AveragePosition = Vector3.zero;
+            if (m_Mask != null) m_Mask.gameObject.SetActive(false);
         }
 
         public override void Initialize(float DampTime)

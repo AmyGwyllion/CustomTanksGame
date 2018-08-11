@@ -16,7 +16,6 @@ namespace Complete
 
         private void Awake ()
         {
-            //m_Behaviour = new SingleView(this, m_Target);
             m_Behaviour = new SplitView(this, m_Target);
         }
 
@@ -42,7 +41,8 @@ namespace Complete
 
         public void SetTarget(Transform target)
         {
-            if(target!=null) m_Target = target;
+            if(target!=null)m_Target = target;
+            m_Behaviour.SetTarget(target);
         }
 
         public Transform GetTarget()

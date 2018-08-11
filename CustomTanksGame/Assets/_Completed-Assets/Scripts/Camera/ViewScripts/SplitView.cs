@@ -6,6 +6,7 @@ namespace Complete
         public SplitView(CameraControl cameraControl, Transform target) : base(cameraControl, target)
         {
             m_CameraControl = cameraControl;
+            if (m_Mask != null) m_Mask.gameObject.SetActive(true);
         }
 
         public override void Initialize(float DampTime)
