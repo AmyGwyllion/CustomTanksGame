@@ -44,8 +44,10 @@ namespace Complete
         private void PointToTarget()
         {
             //Rotate the MaskPivot to m_AveragePosition
-            Vector3 from = GetComponentInParent<CameraControl>().transform.position;
+            Vector3 from = GetComponentInParent<CameraControl>().GetTarget().position;
             Vector3 to = GetComponentInParent<CameraManager>().GetAveragePosition();
+
+            //Debug.Log(from + " --> " + to);
     
             //float angleSign = to.z < from.z ? -1.0f : 1.0f;
             float angle = Vector3.Angle(from, to); // * angleSign;

@@ -3,13 +3,30 @@ namespace Complete
 {
     public abstract class ViewBehaviour
     {
-        protected GameObject m_Parent;
+        protected CameraControl m_CameraControl;    // The CameraControl that is attatched
+        protected Vector3 m_MoveVelocity;           // Reference velocity for the smooth damping of the position
+        protected float m_ZoomSpeed;                // Reference zoom speed for the smooth damping of the zoom
+        protected Camera m_Camera;                  // The camera we want to manipulate
+        protected Transform m_Target;               //Camera player target
 
-        public ViewBehaviour(GameObject parent) { m_Parent = parent; }
 
-        public virtual void FixedUpdate() { Debug.Log("Reached ViewBehaviour Update()"); }
-        protected virtual void Move() { Debug.Log("Reached ViewBehaviour Move()"); }
-        protected virtual void Zoom() { Debug.Log("Reached ViewBehaviour Zoom()"); }
+        public ViewBehaviour(CameraControl cameraControl, Transform target) {
+            m_CameraControl = cameraControl;
+            m_MoveVelocity = Vector3.zero;
+            m_ZoomSpeed = 0.0f;
+            m_Camera = cameraControl.GetComponentInChildren<Camera>();
+            m_Target = target;
+        }
+
+        public virtual void Initialize(float DampTime) { Debug.Log("Reached ViewBehaviour Initialize"); }
+        public virtual void Move(float DampTime) { Debug.Log("Reached ViewBehaviour Move()"); }
+        public virtual void Zoom(float DampTime) { Debug.Log("Reached ViewBehaviour Zoom()"); }
+
+        public virtual void Update(float DampTime)
+        {
+            Move(DampTime);
+            Zoom(DampTime);
+        }
 
     }
 }

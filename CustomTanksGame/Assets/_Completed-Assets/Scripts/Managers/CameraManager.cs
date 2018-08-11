@@ -113,7 +113,7 @@ namespace Complete {
                 size = Mathf.Max(size, Mathf.Abs(desiredPosToTarget.y));
 
                 // Choose the largest out of the current size and the calculated size based on the tank being to the left or right of the camera.
-                size = Mathf.Max(size, Mathf.Abs(desiredPosToTarget.x) / targetCamera.GetAspectRatio());
+                size = Mathf.Max(size, Mathf.Abs(desiredPosToTarget.x) / targetCamera.GetComponentInChildren<Camera>().aspect);
             }
 
             // Add the edge buffer to the size.

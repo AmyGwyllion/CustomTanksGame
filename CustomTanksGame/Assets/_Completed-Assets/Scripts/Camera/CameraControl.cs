@@ -7,44 +7,55 @@ namespace Complete
         public float m_DampTime = 0.2f;                 // Approximate time for the camera to refocus.
         public float m_ScreenEdgeBuffer = 4f;           // Space between the top/bottom most target and the screen edge.
         public float m_MinSize = 6.5f;                  // The smallest orthographic size the camera can be.
+        public bool m_SplitCamera = false;
 
-        private Camera m_Camera;                        // Used for referencing the camera.
-        private float m_ZoomSpeed;                      // Reference speed for the smooth damping of the orthographic size.
-        private Vector3 m_MoveVelocity;                 // Reference velocity for the smooth damping of the position.
-        private Vector3 m_AveragePosition;              // The position the camera is moving towards.
-
-        /*[NEW]***************************/
-        [HideInInspector]  public Transform m_Target;
-        //private bool m_HasMask = false;
+        //[NEW]
+        private Transform m_Target;
         private GameObject m_MaskPivot;
-        //private Transform m_Mask;
-        private ViewControl m_Behaviour;
-        private MaskControl m_Mask;
-        /*********************************/
+        private ViewBehaviour m_Behaviour;
 
         private void Awake ()
         {
-            m_Camera = GetComponentInChildren<Camera> ();
-            m_Behaviour = GetComponent<ViewControl>();
-            m_Mask = GetComponentInChildren<MaskControl>();
+            //m_Behaviour = new SingleView(this, m_Target);
+            m_Behaviour = new SplitView(this, m_Target);
         }
 
         private void Start()
         {
-            m_Behaviour.ChangeToSplitView();
-            
+            ChangeToSingleView();
+        }
+
+        public void ChangeToSplitView()
+        {
+            m_Behaviour = new SplitView(this, m_Target);
+        }
+
+        public void ChangeToSingleView()
+        {
+            m_Behaviour = new SingleView(this, m_Target);
         }
 
         private void FixedUpdate ()
         {
-            // Move the camera towards a desired position.
-            Move ();
-
-            // Change the size of the camera based.
-            Zoom ();
-
+            m_Behaviour.Update(m_DampTime);
         }
 
+        public void SetTarget(Transform target)
+        {
+            if(target!=null) m_Target = target;
+        }
+
+        public Transform GetTarget()
+        {
+            return m_Target;
+        }
+
+        public void SetStartPositionAndSize ()
+        {
+            if(gameObject.activeSelf) m_Behaviour.Initialize(m_DampTime);
+        }
+
+        /*
         private void Move ()
         {
             // Find the average position of the targets.
@@ -64,31 +75,7 @@ namespace Complete
             float requiredSize = GetComponentInParent<CameraManager>().GetRequiredSize(this);
             m_Camera.orthographicSize = Mathf.SmoothDamp (m_Camera.orthographicSize, requiredSize, ref m_ZoomSpeed, m_DampTime);
         }
-
-        public void SetStartPositionAndSize ()
-        {
-            // Find the desired position.
-            //FindAveragePosition ();
-            m_AveragePosition = GetComponentInParent<CameraManager>().GetAveragePosition();
-
-            // Set the camera's position to the desired position without damping.
-            transform.position = m_AveragePosition;
-
-            // Find and set the required size of the camera.
-            m_Camera.orthographicSize = GetComponentInParent<CameraManager>().GetRequiredSize(this);
-        }
-
-        /****SETTERS****/
-        public void SetTarget(Transform target)
-        {
-            if(target!=null) m_Target = target;
-        }
-
-        public float GetAspectRatio()
-        {
-            if (m_Camera != null) return m_Camera.aspect;
-            else return -1.0f;
-        }
-        
+        */
+                
     }
 }
