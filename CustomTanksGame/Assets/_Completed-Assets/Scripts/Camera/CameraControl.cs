@@ -13,7 +13,7 @@ namespace Complete
         private Camera m_Camera;                        // Used for referencing the camera.
         private float m_ZoomSpeed;                      // Reference speed for the smooth damping of the orthographic size.
         private Vector3 m_MoveVelocity;                 // Reference velocity for the smooth damping of the position.
-        private Vector3 m_DesiredPosition;              // The position the camera is moving towards.
+        private Vector3 m_AveragePosition;              // The position the camera is moving towards.
 
         /*[NEW]***************************/
         [HideInInspector]  public Transform m_MyTarget;
@@ -30,40 +30,76 @@ namespace Complete
             foreach (Transform child in m_Camera.transform)
                 if (child.tag == "CameraMask"){
                     m_MaskPivot = child.gameObject;
-                    m_Mask = m_MaskPivot.transform.GetChild(0);
                     m_HasMask = true;
                 }
-
+   
             if (m_HasMask) {
                 InitializeMask();
             }
         }
 
         private void InitializeMask() {
-            ResizeMask();
+            m_Mask = m_MaskPivot.transform.GetChild(0);
         }
 
         private void ResizeMask() {
-            float camHeight = m_Camera.orthographicSize * 2;
-            float camWidth = camHeight * m_Camera.aspect;
+
+            float ch = m_Camera.orthographicSize;
+            float cw = m_Camera.orthographicSize * m_Camera.aspect;
+
+            //float camHeight = ch*2;
+            //float camWidth = cw*2;
 
             Vector3 maskSize = m_Mask.GetComponent<MeshFilter>().mesh.bounds.size;
 
-            Vector3 newScale = new Vector3(camWidth / maskSize.z / 2, camHeight / maskSize.x, 1);
+            float maxHeight = (Mathf.Sqrt(ch * ch + cw * cw))*2;
+
+            float desiredWidth = maxHeight / maskSize.z / 2;
+            float desiredHeight = maxHeight / maskSize.x;
+
+            Vector3 newScale = new Vector3(desiredWidth, desiredHeight, 1);
 
             m_MaskPivot.transform.localScale = newScale;
+        }
+
+        private void UpdateMask() {
+            ResizeMask();
+            PointToTarget();
+        }
+
+        private void PointToTarget() {
+            //Rotate the MaskPivot to m_AveragePosition
+            //m_MaskPivot.transform.Rotate(0, 0, 0.1f);
+
+            Vector3 from = m_MyTarget.transform.position;
+            Vector3 to = m_AveragePosition;
+
+            //Debug.Log("myPos: " + from);
+            //Debug.Log("averagePos: " + to);
+
+            //float angleSign = to.z < from.z ? -1.0f : 1.0f;
+            float angle = Vector3.Angle(from, to); // * angleSign;
+            //Debug.Log("Angle: " + angle);
+
+            Vector3 maskRot = m_MaskPivot.transform.eulerAngles;
+            Vector3 newRot = new Vector3(maskRot.x, -angle, maskRot.x);
+            //Debug.Log("mask angle: " + maskRot);
+            //Debug.Log("new angle: " + newRot);
+
+            m_MaskPivot.transform.eulerAngles = newRot;
+
 
         }
 
         private void FixedUpdate ()
         {
             // Move the camera towards a desired position.
-            //Move ();
+            Move ();
 
             // Change the size of the camera based.
-            //Zoom ();
+            Zoom ();
 
-            if(m_HasMask) ResizeMask();
+            if (m_HasMask) UpdateMask();
 
 
         }
@@ -72,12 +108,15 @@ namespace Complete
         {
             // Find the average position of the targets.
             FindAveragePosition ();
+            Debug.Log("CameraControl: " + m_AveragePosition);
 
             //[NEW] [DELETE LATER]
-            if(m_MyTarget!=null) m_DesiredPosition = new Vector3(m_MyTarget.position.x, transform.position.y, m_MyTarget.position.z);
+            //if(m_MyTarget!=null) m_MyTargetPosition = new Vector3(m_MyTarget.position.x, transform.position.y, m_MyTarget.position.z);
 
             // Smoothly transition to that position.
-            transform.position = Vector3.SmoothDamp(transform.position, m_DesiredPosition, ref m_MoveVelocity, m_DampTime);
+            //transform.position = Vector3.SmoothDamp(transform.position, m_AveragePosition, ref m_MoveVelocity, m_DampTime);
+            Vector3 newPosition = new Vector3(m_MyTarget.position.x, transform.position.y, m_MyTarget.position.z);
+            transform.position = Vector3.SmoothDamp(transform.position, newPosition, ref m_MoveVelocity, m_DampTime);
         }
 
 
@@ -106,7 +145,7 @@ namespace Complete
             averagePos.y = transform.position.y;
 
             // The desired position is the average position;
-            m_DesiredPosition = averagePos;
+            m_AveragePosition = averagePos;
         }
 
 
@@ -121,7 +160,7 @@ namespace Complete
         private float FindRequiredSize ()
         {
             // Find the position the camera rig is moving towards in its local space.
-            Vector3 desiredLocalPos = transform.InverseTransformPoint(m_DesiredPosition);
+            Vector3 desiredLocalPos = transform.InverseTransformPoint(m_AveragePosition);
 
             // Start the camera's size calculation at zero.
             float size = 0f;
@@ -159,14 +198,22 @@ namespace Complete
         public void SetStartPositionAndSize ()
         {
             // Find the desired position.
-            //FindAveragePosition ();
-            //if (m_MyTarget != null) m_DesiredPosition = new Vector3(m_MyTarget.position.x, transform.position.y, m_MyTarget.position.z);
+            FindAveragePosition ();
 
             // Set the camera's position to the desired position without damping.
-            //transform.position = m_DesiredPosition;
+            transform.position = m_AveragePosition;
 
             // Find and set the required size of the camera.
-            //m_Camera.orthographicSize = FindRequiredSize ();
+            m_Camera.orthographicSize = FindRequiredSize ();
+        }
+
+        /****SETTERS****/
+        public void SetTarget(Transform target) {
+            if(target!=null) m_MyTarget = target;
+        }
+
+        public void SetAllTargets(Transform[] targets) {
+            if (targets != null) m_Targets = targets;
         }
     }
 }

@@ -22,10 +22,8 @@ namespace Complete
         private TankManager m_RoundWinner;          // Reference to the winner of the current round.  Used to make an announcement of who won.
         private TankManager m_GameWinner;           // Reference to the winner of the game.  Used to make an announcement of who won.
 
-        /*[NEW]***************************/
-        public CameraControl m_P1Camera;
-        public CameraControl m_P2Camera;
-        /*********************************/
+        //[NEW]
+        public CameraManager m_CameraManager;
 
 
         private void Start()
@@ -35,7 +33,11 @@ namespace Complete
             m_EndWait = new WaitForSeconds (m_EndDelay);
 
             SpawnAllTanks();
-            SetCameraTargets();
+            //SetCameraTargets();
+
+            //[NEW]
+            m_CameraManager.SetPlayers(m_Tanks);
+            m_CameraManager.SetCameraTarget();
 
             // Once the tanks have been created and the camera is using them as targets, start the game.
             StartCoroutine (GameLoop ());
@@ -55,7 +57,7 @@ namespace Complete
             }
         }
 
-
+/*
         private void SetCameraTargets()
         {
             // Create a collection of transforms the same size as the number of tanks.
@@ -67,20 +69,13 @@ namespace Complete
                 // ... set it to the appropriate tank transform.
                 targets[i] = m_Tanks[i].m_Instance.transform;
 
-                //[NEW] Add personal target to main two cameras 
-                if (m_Tanks[i].m_PlayerNumber == 1) m_P1Camera.m_MyTarget = targets[i];
-                if (m_Tanks[i].m_PlayerNumber == 2) m_P2Camera.m_MyTarget = targets[i];
-
             }
 
             // These are the targets the camera should follow.
             //m_CameraControl.m_Targets = targets;
             
-            //[NEW]
-            m_P1Camera.m_Targets = targets;
-            m_P2Camera.m_Targets = targets;
         }
-
+*/
 
         // This is called from start and will run each phase of the game one after another.
         private IEnumerator GameLoop ()
@@ -119,8 +114,7 @@ namespace Complete
             //m_CameraControl.SetStartPositionAndSize ();
 
             //[NEW]
-            m_P1Camera.SetStartPositionAndSize();
-            m_P2Camera.SetStartPositionAndSize();
+            m_CameraManager.Initialize();
 
             // Increment the round number and display text showing the players what round it is.
             m_RoundNumber++;
