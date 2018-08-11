@@ -51,10 +51,10 @@ namespace Complete
             Vector3 v = to - from;
             v.Normalize();
 
-            float angle = Mathf.Atan2(to.z, to.x) * Mathf.Rad2Deg;
+            float angle = Mathf.Atan2(v.z, v.x) * Mathf.Rad2Deg;
 
             Vector3 maskRot = transform.eulerAngles;
-            Vector3 newRot = new Vector3(maskRot.x, angle, maskRot.z);
+            Vector3 newRot = new Vector3(maskRot.x, -angle, maskRot.z);
 
             transform.eulerAngles = newRot;
 
