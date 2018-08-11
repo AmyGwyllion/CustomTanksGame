@@ -7,8 +7,6 @@ namespace Complete
         public float m_DampTime = 0.2f;                 // Approximate time for the camera to refocus.
         public float m_ScreenEdgeBuffer = 4f;           // Space between the top/bottom most target and the screen edge.
         public float m_MinSize = 6.5f;                  // The smallest orthographic size the camera can be.
-        [HideInInspector] public Transform[] m_Targets; // All the targets the camera needs to encompass.
-
 
         private Camera m_Camera;                        // Used for referencing the camera.
         private float m_ZoomSpeed;                      // Reference speed for the smooth damping of the orthographic size.
@@ -16,15 +14,17 @@ namespace Complete
         private Vector3 m_AveragePosition;              // The position the camera is moving towards.
 
         /*[NEW]***************************/
-        [HideInInspector]  public Transform m_MyTarget;
+        [HideInInspector]  public Transform m_Target;
         private bool m_HasMask = false;
         private GameObject m_MaskPivot;
         private Transform m_Mask;
+        private ViewControl m_Behaviour;
         /*********************************/
 
         private void Awake ()
         {
             m_Camera = GetComponentInChildren<Camera> ();
+            m_Behaviour = GetComponent<ViewControl>();
 
             //[NEW]
             foreach (Transform child in m_Camera.transform)
@@ -38,6 +38,12 @@ namespace Complete
             }
         }
 
+        private void Start()
+        {
+            m_Behaviour.ChangeToSingleBehaviour();
+            
+        }
+
         private void InitializeMask() {
             m_Mask = m_MaskPivot.transform.GetChild(0);
         }
@@ -46,9 +52,6 @@ namespace Complete
 
             float ch = m_Camera.orthographicSize;
             float cw = m_Camera.orthographicSize * m_Camera.aspect;
-
-            //float camHeight = ch*2;
-            //float camWidth = cw*2;
 
             Vector3 maskSize = m_Mask.GetComponent<MeshFilter>().mesh.bounds.size;
 
@@ -69,22 +72,16 @@ namespace Complete
 
         private void PointToTarget() {
             //Rotate the MaskPivot to m_AveragePosition
-            //m_MaskPivot.transform.Rotate(0, 0, 0.1f);
 
-            Vector3 from = m_MyTarget.transform.position;
+            Vector3 from = m_Target.transform.position;
             Vector3 to = m_AveragePosition;
 
-            //Debug.Log("myPos: " + from);
-            //Debug.Log("averagePos: " + to);
 
             //float angleSign = to.z < from.z ? -1.0f : 1.0f;
             float angle = Vector3.Angle(from, to); // * angleSign;
-            //Debug.Log("Angle: " + angle);
 
             Vector3 maskRot = m_MaskPivot.transform.eulerAngles;
-            Vector3 newRot = new Vector3(maskRot.x, -angle, maskRot.x);
-            //Debug.Log("mask angle: " + maskRot);
-            //Debug.Log("new angle: " + newRot);
+            Vector3 newRot = new Vector3(maskRot.x, angle, maskRot.x);
 
             m_MaskPivot.transform.eulerAngles = newRot;
 
@@ -107,113 +104,47 @@ namespace Complete
         private void Move ()
         {
             // Find the average position of the targets.
-            FindAveragePosition ();
-            Debug.Log("CameraControl: " + m_AveragePosition);
-
-            //[NEW] [DELETE LATER]
-            //if(m_MyTarget!=null) m_MyTargetPosition = new Vector3(m_MyTarget.position.x, transform.position.y, m_MyTarget.position.z);
+            m_AveragePosition = GetComponentInParent<CameraManager>().GetAveragePosition();
 
             // Smoothly transition to that position.
             //transform.position = Vector3.SmoothDamp(transform.position, m_AveragePosition, ref m_MoveVelocity, m_DampTime);
-            Vector3 newPosition = new Vector3(m_MyTarget.position.x, transform.position.y, m_MyTarget.position.z);
+
+            //Follow the player
+            Vector3 newPosition = new Vector3(m_Target.position.x, transform.position.y, m_Target.position.z);
             transform.position = Vector3.SmoothDamp(transform.position, newPosition, ref m_MoveVelocity, m_DampTime);
         }
-
-
-        private void FindAveragePosition ()
-        {
-            Vector3 averagePos = new Vector3 ();
-            int numTargets = 0;
-
-            // Go through all the targets and add their positions together.
-            for (int i = 0; i < m_Targets.Length; i++)
-            {
-                // If the target isn't active, go on to the next one.
-                if (!m_Targets[i].gameObject.activeSelf)
-                    continue;
-
-                // Add to the average and increment the number of targets in the average.
-                averagePos += m_Targets[i].position;
-                numTargets++;
-            }
-
-            // If there are targets divide the sum of the positions by the number of them to find the average.
-            if (numTargets > 0)
-                averagePos /= numTargets;
-
-            // Keep the same y value.
-            averagePos.y = transform.position.y;
-
-            // The desired position is the average position;
-            m_AveragePosition = averagePos;
-        }
-
 
         private void Zoom ()
         {
             // Find the required size based on the desired position and smoothly transition to that size.
-            float requiredSize = FindRequiredSize();
+            float requiredSize = GetComponentInParent<CameraManager>().GetRequiredSize(this);
             m_Camera.orthographicSize = Mathf.SmoothDamp (m_Camera.orthographicSize, requiredSize, ref m_ZoomSpeed, m_DampTime);
         }
-
-
-        private float FindRequiredSize ()
-        {
-            // Find the position the camera rig is moving towards in its local space.
-            Vector3 desiredLocalPos = transform.InverseTransformPoint(m_AveragePosition);
-
-            // Start the camera's size calculation at zero.
-            float size = 0f;
-
-            // Go through all the targets...
-            for (int i = 0; i < m_Targets.Length; i++)
-            {
-                // ... and if they aren't active continue on to the next target.
-                if (!m_Targets[i].gameObject.activeSelf)
-                    continue;
-
-                // Otherwise, find the position of the target in the camera's local space.
-                Vector3 targetLocalPos = transform.InverseTransformPoint(m_Targets[i].position);
-
-                // Find the position of the target from the desired position of the camera's local space.
-                Vector3 desiredPosToTarget = targetLocalPos - desiredLocalPos;
-
-                // Choose the largest out of the current size and the distance of the tank 'up' or 'down' from the camera.
-                size = Mathf.Max(size, Mathf.Abs(desiredPosToTarget.y));
-
-                // Choose the largest out of the current size and the calculated size based on the tank being to the left or right of the camera.
-                size = Mathf.Max(size, Mathf.Abs(desiredPosToTarget.x) / m_Camera.aspect);
-            }
-
-            // Add the edge buffer to the size.
-            size += m_ScreenEdgeBuffer;
-
-            // Make sure the camera's size isn't below the minimum.
-            size = Mathf.Max (size, m_MinSize);
-
-            return size;
-        }
-
 
         public void SetStartPositionAndSize ()
         {
             // Find the desired position.
-            FindAveragePosition ();
+            //FindAveragePosition ();
+            m_AveragePosition = GetComponentInParent<CameraManager>().GetAveragePosition();
 
             // Set the camera's position to the desired position without damping.
             transform.position = m_AveragePosition;
 
             // Find and set the required size of the camera.
-            m_Camera.orthographicSize = FindRequiredSize ();
+            m_Camera.orthographicSize = GetComponentInParent<CameraManager>().GetRequiredSize(this);
         }
 
         /****SETTERS****/
-        public void SetTarget(Transform target) {
-            if(target!=null) m_MyTarget = target;
+        public void SetTarget(Transform target)
+        {
+            if(target!=null) m_Target = target;
         }
 
-        public void SetAllTargets(Transform[] targets) {
-            if (targets != null) m_Targets = targets;
+        public float GetAspectRatio()
+        {
+            if (m_Camera != null) return m_Camera.aspect;
+            else return -1.0f;
         }
+        
     }
 }

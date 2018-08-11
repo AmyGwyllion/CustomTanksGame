@@ -5,18 +5,16 @@ using UnityEngine;
 namespace Complete { 
     public class CameraManager : MonoBehaviour {
 
-        private TankManager[] m_Players;                        // All player objects in scene
+        private TankManager[] m_Players;                         // All player objects in scene
         private Transform[] m_PTransforms;                       // All player transforms
-        private Vector3 m_AveragePosition;                      // The average position between all players
-        private List<CameraControl> m_Cameras;                  // All Cameras Controllers
-        private Dictionary<int, CameraControl> m_PlayerCamera;  // Player asigned camera
+        private List<CameraControl> m_Cameras;                   // All Cameras Controllers
+        private Dictionary<int, CameraControl> m_PlayerCamera;   // Player asigned camera
 
         private void Awake()
         {
             //Initialize variables
             m_Players = new TankManager[0];
             m_PTransforms = new Transform[0];
-            m_AveragePosition = new Vector3();
             m_Cameras = new List<CameraControl>();
             m_PlayerCamera = new Dictionary<int, CameraControl>();   
         }
@@ -50,7 +48,6 @@ namespace Complete {
 
             for (int i = 0; i < m_Cameras.Count; i++) {
                 m_Cameras[i].SetStartPositionAndSize();
-                m_Cameras[i].SetAllTargets(m_PTransforms);
             }
         }
 
@@ -61,6 +58,71 @@ namespace Complete {
                 m_PlayerCamera.Add(m_Players[i].m_PlayerNumber, m_Cameras[i]);
                 m_Cameras[i].SetTarget(m_Players[i].m_Instance.transform);
             }
+        }
+
+        public Vector3 GetAveragePosition()
+        {
+            Vector3 averagePos = new Vector3();
+            int numTargets = 0;
+
+            // Go through all the targets and add their positions together.
+            for (int i = 0; i < m_PTransforms.Length; i++)
+            {
+                // If the target isn't active, go on to the next one.
+                if (!m_PTransforms[i].gameObject.activeSelf)
+                    continue;
+
+                // Add to the average and increment the number of targets in the average.
+                averagePos += m_PTransforms[i].position;
+                numTargets++;
+            }
+
+            // If there are targets divide the sum of the positions by the number of them to find the average.
+            if (numTargets > 0)
+                averagePos /= numTargets;
+
+            // Keep the same y value.
+            averagePos.y = transform.position.y;
+
+            // The desired position is the average position;
+            return averagePos;
+        }
+
+        public float GetRequiredSize(CameraControl targetCamera)
+        {
+            // Find the position the camera rig is moving towards in its local space.
+            Vector3 desiredLocalPos = targetCamera.transform.InverseTransformPoint(GetAveragePosition());
+
+            // Start the camera's size calculation at zero.
+            float size = 0f;
+
+            // Go through all the targets...
+            for (int i = 0; i < m_PTransforms.Length; i++)
+            {
+                // ... and if they aren't active continue on to the next target.
+                if (!m_PTransforms[i].gameObject.activeSelf)
+                    continue;
+
+                // Otherwise, find the position of the target in the camera's local space.
+                Vector3 targetLocalPos = targetCamera.transform.InverseTransformPoint(m_PTransforms[i].position);
+
+                // Find the position of the target from the desired position of the camera's local space.
+                Vector3 desiredPosToTarget = targetLocalPos - desiredLocalPos;
+
+                // Choose the largest out of the current size and the distance of the tank 'up' or 'down' from the camera.
+                size = Mathf.Max(size, Mathf.Abs(desiredPosToTarget.y));
+
+                // Choose the largest out of the current size and the calculated size based on the tank being to the left or right of the camera.
+                size = Mathf.Max(size, Mathf.Abs(desiredPosToTarget.x) / targetCamera.GetAspectRatio());
+            }
+
+            // Add the edge buffer to the size.
+            size += targetCamera.m_ScreenEdgeBuffer;
+
+            // Make sure the camera's size isn't below the minimum.
+            size = Mathf.Max(size, targetCamera.m_MinSize);
+
+            return size;
         }
 
         /***SETTERS****/
