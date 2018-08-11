@@ -15,77 +15,24 @@ namespace Complete
 
         /*[NEW]***************************/
         [HideInInspector]  public Transform m_Target;
-        private bool m_HasMask = false;
+        //private bool m_HasMask = false;
         private GameObject m_MaskPivot;
-        private Transform m_Mask;
+        //private Transform m_Mask;
         private ViewControl m_Behaviour;
+        private MaskControl m_Mask;
         /*********************************/
 
         private void Awake ()
         {
             m_Camera = GetComponentInChildren<Camera> ();
             m_Behaviour = GetComponent<ViewControl>();
-
-            //[NEW]
-            foreach (Transform child in m_Camera.transform)
-                if (child.tag == "CameraMask"){
-                    m_MaskPivot = child.gameObject;
-                    m_HasMask = true;
-                }
-   
-            if (m_HasMask) {
-                InitializeMask();
-            }
+            m_Mask = GetComponentInChildren<MaskControl>();
         }
 
         private void Start()
         {
-            m_Behaviour.ChangeToSingleBehaviour();
+            m_Behaviour.ChangeToSplitView();
             
-        }
-
-        private void InitializeMask() {
-            m_Mask = m_MaskPivot.transform.GetChild(0);
-        }
-
-        private void ResizeMask() {
-
-            float ch = m_Camera.orthographicSize;
-            float cw = m_Camera.orthographicSize * m_Camera.aspect;
-
-            Vector3 maskSize = m_Mask.GetComponent<MeshFilter>().mesh.bounds.size;
-
-            float maxHeight = (Mathf.Sqrt(ch * ch + cw * cw))*2;
-
-            float desiredWidth = maxHeight / maskSize.z / 2;
-            float desiredHeight = maxHeight / maskSize.x;
-
-            Vector3 newScale = new Vector3(desiredWidth, desiredHeight, 1);
-
-            m_MaskPivot.transform.localScale = newScale;
-        }
-
-        private void UpdateMask() {
-            ResizeMask();
-            PointToTarget();
-        }
-
-        private void PointToTarget() {
-            //Rotate the MaskPivot to m_AveragePosition
-
-            Vector3 from = m_Target.transform.position;
-            Vector3 to = m_AveragePosition;
-
-
-            //float angleSign = to.z < from.z ? -1.0f : 1.0f;
-            float angle = Vector3.Angle(from, to); // * angleSign;
-
-            Vector3 maskRot = m_MaskPivot.transform.eulerAngles;
-            Vector3 newRot = new Vector3(maskRot.x, angle, maskRot.x);
-
-            m_MaskPivot.transform.eulerAngles = newRot;
-
-
         }
 
         private void FixedUpdate ()
@@ -95,9 +42,6 @@ namespace Complete
 
             // Change the size of the camera based.
             Zoom ();
-
-            if (m_HasMask) UpdateMask();
-
 
         }
 
