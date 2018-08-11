@@ -7,15 +7,17 @@ namespace Complete
         public float m_DampTime = 0.2f;                 // Approximate time for the camera to refocus.
         public float m_ScreenEdgeBuffer = 4f;           // Space between the top/bottom most target and the screen edge.
         public float m_MinSize = 6.5f;                  // The smallest orthographic size the camera can be.
+        public float m_MaxSize = 10.0f;
         public bool m_SplitCamera = false;
 
         //[NEW]
         private Transform m_Target;
         private GameObject m_MaskPivot;
         private ViewBehaviour m_Behaviour;
-
+        private bool m_isViewSplit;
         private void Awake ()
         {
+            m_isViewSplit = true;
             m_Behaviour = new SplitView(this, m_Target);
         }
 
@@ -26,11 +28,13 @@ namespace Complete
 
         public void ChangeToSplitView()
         {
+            m_isViewSplit = true;
             m_Behaviour = new SplitView(this, m_Target);
         }
 
         public void ChangeToSingleView()
         {
+            m_isViewSplit = false;
             m_Behaviour = new SingleView(this, m_Target);
         }
 
@@ -53,6 +57,11 @@ namespace Complete
         public void SetStartPositionAndSize ()
         {
             if(gameObject.activeSelf) m_Behaviour.Initialize(m_DampTime);
+        }
+
+        public bool IsViewSplit()
+        {
+            return m_isViewSplit;
         }
 
         /*

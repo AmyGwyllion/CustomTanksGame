@@ -17,7 +17,7 @@ namespace Complete
             m_ZoomSpeed = 0.0f;
             m_Camera = cameraControl.GetComponentInChildren<Camera>();
             m_Target = target;
-            m_Mask = cameraControl.GetComponentInChildren<MaskControl>();
+            m_Mask = cameraControl.GetComponentInChildren<MaskControl>(true);
         }
 
         public virtual void Initialize(float DampTime) { Debug.Log("Reached ViewBehaviour Initialize"); }

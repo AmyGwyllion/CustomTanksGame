@@ -29,7 +29,36 @@ namespace Complete {
         // Update is called once per frame
         void FixedUpdate()
         {
+            CheckP1P2Cameras();
+        }
 
+        //If their camera bounds are close merge view
+        private void CheckP1P2Cameras()
+        {
+            Camera P1 = m_PlayerCamera[1].GetComponentInChildren<Camera>();
+            Camera P2 = m_PlayerCamera[2].GetComponentInChildren<Camera>();
+            float dist = Vector3.Distance(m_PTransforms[0].position, m_PTransforms[1].position);
+            Vector3 coord = P1.WorldToViewportPoint(m_PTransforms[1].position);
+
+            if (coord.x > 0.0f && coord.x < 1.0f || coord.y > 0.0f && coord.y < 1.0f)
+            {
+                //Merge Cameras
+                if (m_PlayerCamera[1].IsViewSplit())
+                {
+                    m_PlayerCamera[1].ChangeToSingleView();
+                    m_PlayerCamera[2].ChangeToSingleView();
+                }
+            }
+            //Else if zoom is to high
+            if(dist>40.0f)
+            {
+                if (!m_PlayerCamera[1].IsViewSplit())
+                {
+                    m_PlayerCamera[1].ChangeToSplitView();
+                    m_PlayerCamera[2].ChangeToSplitView();
+                }
+            }
+           
         }
 
         /****PUBLIC****/

@@ -14,11 +14,12 @@ namespace Complete
         }
         // Use this for initialization
         void Start() {
-
+            
         }
 
         // Update is called once per frame
-        private void FixedUpdate() {
+        //FixedUpdate[TODO]
+        private void LateUpdate() {
             Resize();
             PointToTarget();
         }
@@ -47,13 +48,13 @@ namespace Complete
             Vector3 from = GetComponentInParent<CameraControl>().GetTarget().position;
             Vector3 to = GetComponentInParent<CameraManager>().GetAveragePosition();
 
-            //Debug.Log(from + " --> " + to);
-    
-            //float angleSign = to.z < from.z ? -1.0f : 1.0f;
-            float angle = Vector3.Angle(from, to); // * angleSign;
+            Vector3 v = to - from;
+            v.Normalize();
+
+            float angle = Mathf.Atan2(to.z, to.x) * Mathf.Rad2Deg;
 
             Vector3 maskRot = transform.eulerAngles;
-            Vector3 newRot = new Vector3(maskRot.x, angle, maskRot.x);
+            Vector3 newRot = new Vector3(maskRot.x, angle, maskRot.z);
 
             transform.eulerAngles = newRot;
 

@@ -6,7 +6,10 @@ namespace Complete
         public SplitView(CameraControl cameraControl, Transform target) : base(cameraControl, target)
         {
             m_CameraControl = cameraControl;
-            if (m_Mask != null) m_Mask.gameObject.SetActive(true);
+            if (m_Mask != null)
+            {
+                m_Mask.gameObject.SetActive(true);
+            }
         }
 
         public override void Initialize(float DampTime)
@@ -33,8 +36,8 @@ namespace Complete
         public override void Zoom( float DampTime)
         {
             // Find the required size based on the desired position and smoothly transition to that size.
-            float requiredSize = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
-            m_Camera.orthographicSize = Mathf.SmoothDamp(m_Camera.orthographicSize, requiredSize, ref m_ZoomSpeed, DampTime);
+            //float requiredSize = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
+            //m_Camera.orthographicSize = Mathf.SmoothDamp(m_Camera.orthographicSize, requiredSize, ref m_ZoomSpeed, DampTime);
         }
     }
 }
