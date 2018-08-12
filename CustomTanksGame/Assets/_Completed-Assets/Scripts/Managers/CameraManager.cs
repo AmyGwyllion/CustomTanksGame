@@ -5,6 +5,7 @@ using UnityEngine;
 namespace Complete { 
     public class CameraManager : MonoBehaviour {
 
+        public float MaxPlayerDistance;
         private TankManager[] m_Players;                         // All player objects in scene
         private Transform[] m_PTransforms;                       // All player transforms
         private List<CameraControl> m_Cameras;                   // All Cameras Controllers
@@ -16,7 +17,8 @@ namespace Complete {
             m_Players = new TankManager[0];
             m_PTransforms = new Transform[0];
             m_Cameras = new List<CameraControl>();
-            m_PlayerCamera = new Dictionary<int, CameraControl>();   
+            m_PlayerCamera = new Dictionary<int, CameraControl>();
+            MaxPlayerDistance = 20.0f;
         }
 
         // Use this for initialization
@@ -40,7 +42,7 @@ namespace Complete {
             float dist = Vector3.Distance(m_PTransforms[0].position, m_PTransforms[1].position);
             Vector3 coord = P1.WorldToViewportPoint(m_PTransforms[1].position);
 
-            if (coord.x > 0.0f && coord.x < 1.0f || coord.y > 0.0f && coord.y < 1.0f)
+            if ((coord.x > 0.0f && coord.x < 1.0f || coord.y > 0.0f && coord.y < 1.0f) && dist<= MaxPlayerDistance)
             {
                 //Merge Cameras
                 if (m_PlayerCamera[1].IsViewSplit())
@@ -50,7 +52,7 @@ namespace Complete {
                 }
             }
             //Else if distance is to high
-            if(dist>20.0f)
+            else if(dist> MaxPlayerDistance)
             {
                 if (!m_PlayerCamera[1].IsViewSplit())
                 {

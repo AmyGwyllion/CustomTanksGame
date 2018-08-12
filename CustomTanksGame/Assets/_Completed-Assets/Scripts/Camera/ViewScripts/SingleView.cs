@@ -3,12 +3,10 @@ namespace Complete
 {
     public class SingleView : ViewBehaviour
     {
-        private Vector3 m_AveragePosition;
-
-        public SingleView(CameraControl cameraControl, Transform target) : base(cameraControl, target)
+         public SingleView(CameraControl cameraControl, Transform target) : base(cameraControl, target)
         {
+            m_Class = E_VIEWCLASS.Single;
             m_CameraControl = cameraControl;
-            m_AveragePosition = Vector3.zero;
             if (m_Mask != null) m_Mask.gameObject.SetActive(false);
         }
 
@@ -30,11 +28,15 @@ namespace Complete
 
         public override void Move( float DampTime )
         {
-            // Find the average position of the targets.
-            m_AveragePosition = m_CameraControl.GetComponentInParent<CameraManager>().GetAveragePosition();
-
-            // Smoothly transition to that position.
-            m_CameraControl.transform.position = Vector3.SmoothDamp(m_CameraControl.transform.position, m_AveragePosition, ref m_MoveVelocity, DampTime);
+            Vector3 pos = m_CameraControl.GetComponentInParent<CameraManager>().GetAveragePosition();
+            //if (!CheckIfClamping(pos)){
+                // Find the average position of the targets.
+                m_TargetPosition = pos;
+                //m_TargetPosition.x = Mathf.Clamp(m_TargetPosition.x, -107.0f, 107.0f);
+                //m_TargetPosition.z = Mathf.Clamp(m_TargetPosition.z, -107.0f, 107.0f);
+                // Smoothly transition to that position.
+                m_CameraControl.transform.position = Vector3.SmoothDamp(m_CameraControl.transform.position, m_TargetPosition, ref m_MoveVelocity, DampTime);
+            //}
         }
 
         public override void Zoom(float DampTime)

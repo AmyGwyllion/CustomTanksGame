@@ -254,13 +254,14 @@ GameObject:
   m_Component:
   - component: {fileID: 170431708}
   - component: {fileID: 170431709}
+  - component: {fileID: 170431710}
   m_Layer: 12
   m_Name: WorldRaycastBounds
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &170431708
 Transform:
   m_ObjectHideFlags: 0
@@ -286,6 +287,17 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 107, y: 8, z: 107}
   m_Center: {x: 0.09857941, y: 3.5665321, z: 0.076602936}
+--- !u!114 &170431710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 170431707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cd52ab67d84c6e45baf35ec399bfb05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &194018015
 GameObject:
   m_ObjectHideFlags: 0
