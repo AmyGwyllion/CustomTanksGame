@@ -6,6 +6,7 @@ namespace Complete
 
         private Mesh m_MaskPlane;
         private Camera m_Camera;
+        private float m_Angle;
 
         private void Awake()
         {
@@ -47,17 +48,23 @@ namespace Complete
             //Rotate the MaskPivot to m_AveragePosition
             Vector3 from = GetComponentInParent<CameraControl>().GetTarget().position;
             Vector3 to = GetComponentInParent<CameraManager>().GetAveragePosition();
+            float cameraRot = GetComponentInParent<CameraControl>().transform.eulerAngles.y;
 
             Vector3 v = to - from;
             v.Normalize();
 
-            float angle = Mathf.Atan2(v.z, v.x) * Mathf.Rad2Deg;
+            m_Angle = (Mathf.Atan2(v.z, v.x) * Mathf.Rad2Deg) + cameraRot;
 
             Vector3 maskRot = transform.eulerAngles;
-            Vector3 newRot = new Vector3(maskRot.x, -angle, maskRot.z);
+            Vector3 newRot = new Vector3(maskRot.x, maskRot.y, m_Angle);
 
             transform.eulerAngles = newRot;
 
+        }
+
+        public float GetRotationAngle()
+        {
+            return m_Angle;
         }
     }
 }

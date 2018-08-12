@@ -3,9 +3,11 @@ namespace Complete
 {
     public class SplitView : ViewBehaviour
     {
+        private float m_Angle;
         public SplitView(CameraControl cameraControl, Transform target) : base(cameraControl, target)
         {
             m_CameraControl = cameraControl;
+            m_Angle = 0.0f;
             if (m_Mask != null)
             {
                 m_Mask.gameObject.SetActive(true);
@@ -30,7 +32,9 @@ namespace Complete
         public override void Move( float DampTime)
         {
             // Smoothly transition to that position.
-            m_CameraControl.transform.position = Vector3.SmoothDamp(m_CameraControl.transform.position, m_Target.position, ref m_MoveVelocity, DampTime);
+            Vector3 pos = m_CameraControl.GetComponentInParent<CameraManager>().GetAveragePosition() - m_Target.transform.position;
+            Vector3 finalpos = m_Target.position + pos/4;
+            m_CameraControl.transform.position = Vector3.SmoothDamp(m_CameraControl.transform.position, finalpos, ref m_MoveVelocity, DampTime);
         }
 
         public override void Zoom( float DampTime)

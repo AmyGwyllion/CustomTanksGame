@@ -50,7 +50,7 @@ namespace Complete {
                 }
             }
             //Else if zoom is to high
-            if(dist>40.0f)
+            if(dist>20.0f)
             {
                 if (!m_PlayerCamera[1].IsViewSplit())
                 {
