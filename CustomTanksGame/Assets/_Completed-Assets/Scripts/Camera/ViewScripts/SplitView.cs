@@ -3,11 +3,9 @@ namespace Complete
 {
     public class SplitView : ViewBehaviour
     {
-        private float m_Angle;
         public SplitView(CameraControl cameraControl, Transform target) : base(cameraControl, target)
         {
             m_CameraControl = cameraControl;
-            m_Angle = 0.0f;
             if (m_Mask != null)
             {
                 m_Mask.gameObject.SetActive(true);

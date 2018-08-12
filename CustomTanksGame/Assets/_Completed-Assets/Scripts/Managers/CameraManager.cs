@@ -36,7 +36,7 @@ namespace Complete {
         private void CheckP1P2Cameras()
         {
             Camera P1 = m_PlayerCamera[1].GetComponentInChildren<Camera>();
-            Camera P2 = m_PlayerCamera[2].GetComponentInChildren<Camera>();
+
             float dist = Vector3.Distance(m_PTransforms[0].position, m_PTransforms[1].position);
             Vector3 coord = P1.WorldToViewportPoint(m_PTransforms[1].position);
 
@@ -49,7 +49,7 @@ namespace Complete {
                     m_PlayerCamera[2].ChangeToSingleView();
                 }
             }
-            //Else if zoom is to high
+            //Else if distance is to high
             if(dist>20.0f)
             {
                 if (!m_PlayerCamera[1].IsViewSplit())
