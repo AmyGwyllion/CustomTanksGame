@@ -1,5 +1,5 @@
 ﻿/*
-	SetRenderQueue.cs
+	This script is used for making the plane act like a mask for the splited view
  
 	Sets the RenderQueue of an object's materials on Awake. This will instance
 	the materials, so the script won't interfere with other renderers that

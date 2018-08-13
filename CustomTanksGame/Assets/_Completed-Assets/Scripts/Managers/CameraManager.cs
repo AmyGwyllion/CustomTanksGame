@@ -1,15 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
+ /**
+  * This script is used to controll al cameras in the scene
+  */
 namespace Complete { 
     public class CameraManager : MonoBehaviour {
 
-        public float MaxPlayerDistance;
-        private TankManager[] m_Players;                         // All player objects in scene
-        private Transform[] m_PTransforms;                       // All player transforms
-        private List<CameraControl> m_Cameras;                   // All Cameras Controllers
-        private Dictionary<int, CameraControl> m_PlayerCamera;   // Player asigned camera
+        public float MaxPlayerDistance;                             // The maximum distance the players can be before whe split the camera view
+        private TankManager[] m_Players;                            // All player objects in scene, GameManager populates it using the set method down below
+        private Transform[] m_PTransforms;                          // All player transforms
+        private List<CameraControl> m_Cameras;                      // All Cameras Controllers
+        private Dictionary<int, CameraControl> m_PlayerCamera;      // All cameras by player number
 
         private void Awake()
         {
@@ -21,49 +23,12 @@ namespace Complete {
             MaxPlayerDistance = 20.0f;
         }
 
-        // Use this for initialization
         void Start ()
         {
             //Get all camera childs
             foreach (Transform child in transform) m_Cameras.Add(child.gameObject.GetComponent<CameraControl>());
         }
 
-        // Update is called once per frame
-        void FixedUpdate()
-        {
-            CheckP1P2Cameras();
-        }
-
-        //If their camera bounds are close merge view
-        private void CheckP1P2Cameras()
-        {
-            Camera P1 = m_PlayerCamera[1].GetComponentInChildren<Camera>();
-
-            float dist = Vector3.Distance(m_PTransforms[0].position, m_PTransforms[1].position);
-            Vector3 coord = P1.WorldToViewportPoint(m_PTransforms[1].position);
-
-            if ((coord.x > 0.0f && coord.x < 1.0f || coord.y > 0.0f && coord.y < 1.0f) && dist<= MaxPlayerDistance)
-            {
-                //Merge Cameras
-                if (m_PlayerCamera[1].IsViewSplit())
-                {
-                    m_PlayerCamera[1].ChangeToSingleView();
-                    m_PlayerCamera[2].ChangeToSingleView();
-                }
-            }
-            //Else if distance is to high
-            else if(dist> MaxPlayerDistance)
-            {
-                if (!m_PlayerCamera[1].IsViewSplit())
-                {
-                    m_PlayerCamera[1].ChangeToSplitView();
-                    m_PlayerCamera[2].ChangeToSplitView();
-                }
-            }
-           
-        }
-
-        /****PUBLIC****/
         public void Initialize()
         {
             // Create a collection of transforms the same size as the number of tanks.
@@ -82,6 +47,44 @@ namespace Complete {
             }
         }
 
+        private void FixedUpdate()
+        {
+            // Only player one and player two cameras are going to be cheched for splitting view
+            CheckP1P2Cameras();
+        }
+
+        //If their camera bounds are close merge view
+        private void CheckP1P2Cameras()
+        {
+            // Get the player one camera
+            Camera P1 = m_PlayerCamera[1].GetComponentInChildren<Camera>();
+
+            // Calculate the distance between player1 one and player2 
+            float dist = Vector3.Distance(m_PTransforms[0].position, m_PTransforms[1].position);
+
+            // Check if the player2 position is inside the player1 camera viewport
+            Vector3 coord = P1.WorldToViewportPoint(m_PTransforms[1].position);
+            if ((coord.x > 0.0f && coord.x < 1.0f || coord.y > 0.0f && coord.y < 1.0f) && dist<= MaxPlayerDistance)
+            {
+                //If player2 is inside player1 field of view change to single view camera
+                if (m_PlayerCamera[1].IsViewSplit())
+                {
+                    m_PlayerCamera[1].ChangeToSingleView();
+                    m_PlayerCamera[2].ChangeToSingleView();
+                }
+            }
+            //Else if distance is to high change to split view
+            else if(dist> MaxPlayerDistance)
+            {
+                if (!m_PlayerCamera[1].IsViewSplit())
+                {
+                    m_PlayerCamera[1].ChangeToSplitView();
+                    m_PlayerCamera[2].ChangeToSplitView();
+                }
+            }
+           
+        }
+
         public void SetCameraTarget()
         {
             for (int i = 0; i < m_Players.Length && i< m_Cameras.Count; i++)
@@ -91,6 +94,7 @@ namespace Complete {
             }
         }
 
+        // This method is used from external scripts
         public Vector3 GetAveragePosition()
         {
             Vector3 averagePos = new Vector3();
@@ -156,7 +160,6 @@ namespace Complete {
             return size;
         }
 
-        /***SETTERS****/
         public void SetPlayers(TankManager[] players) {
             if(players!=null) m_Players = players;
         }

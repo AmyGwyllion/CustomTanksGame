@@ -214,7 +214,7 @@ GameObject:
   - component: {fileID: 105571254}
   - component: {fileID: 105571255}
   m_Layer: 10
-  m_Name: MaskControl
+  m_Name: MaskControlPivot
   m_TagString: CameraMask
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

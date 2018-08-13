@@ -1,24 +1,26 @@
 ﻿using UnityEngine;
+
+/**
+ * This class is used to thefine the split view camera behaviour
+ */
 namespace Complete
 {
     public class SplitView : ViewBehaviour
     {
+        // Class constructor
         public SplitView(CameraControl cameraControl, Transform target) : base(cameraControl, target)
         {
-            m_Class = E_VIEWCLASS.Split;
-            m_CameraControl = cameraControl;
-            if (m_Mask != null)
-            {
-                m_Mask.gameObject.SetActive(true);
-            }
+            m_Class = E_VIEWCLASS.Split;                            // The object class identifier
+            m_CameraControl = cameraControl;                        // The CameraControl object attatched to it
+            if (m_Mask != null) m_Mask.gameObject.SetActive(true);  // If the camera has a mask on it enable it
         }
 
-        public override void Initialize(float DampTime)
+        // We call this method for initializing the camera position without damping time
+        public override void Initialize()
         {
             // Find the desired position.
             // Set the camera's position to the desired position without damping.
-            //m_CameraControl.transform.position = m_Target.position;
-            Vector3 pos = m_CameraControl.GetComponentInParent<CameraManager>().GetAveragePosition() - m_Target.transform.position;
+            Vector3 pos = m_CameraControl.GetComponentInParent<CameraManager>().GetAveragePosition() - m_Player.transform.position;
             m_CameraControl.transform.position = pos / 3;
 
             // Find and set the required size of the camera.
@@ -27,24 +29,25 @@ namespace Complete
 
         public override void Update (float DampTime)
         {
+            //Use the base class update
             base.Update(DampTime);
         }
 
         public override void Move( float DampTime)
         {
-            Vector3 pos = m_CameraControl.GetComponentInParent<CameraManager>().GetAveragePosition() - m_Target.transform.position;
-            //if(!CheckIfClamping(pos)){ 
-                m_TargetPosition = m_Target.position + pos/3;
-                // Smoothly transition to that position.
-                m_CameraControl.transform.position = Vector3.SmoothDamp(m_CameraControl.transform.position, m_TargetPosition, ref m_MoveVelocity, DampTime);
-            //}
+            // Find the desired camera position
+            Vector3 pos = m_CameraControl.GetComponentInParent<CameraManager>().GetAveragePosition() - m_Player.transform.position;
+            Vector3 target = m_Player.position + pos/3;
+            
+            // Smoothly transition to that position.
+            m_CameraControl.transform.position = Vector3.SmoothDamp(m_CameraControl.transform.position, target, ref m_MoveVelocity, DampTime);
         }
 
         public override void Zoom( float DampTime)
         {
             // Find the required size based on the desired position and smoothly transition to that size.
-            //float requiredSize = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
-            //m_Camera.orthographicSize = Mathf.SmoothDamp(m_Camera.orthographicSize, requiredSize, ref m_ZoomSpeed, DampTime);
+            float requiredSize = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
+            m_Camera.orthographicSize = Mathf.SmoothDamp(m_Camera.orthographicSize, requiredSize, ref m_ZoomSpeed, DampTime);
         }
     }
 }

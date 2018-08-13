@@ -1,25 +1,23 @@
 ﻿using UnityEngine;
 
+/**
+ * This script is used to control the plane mask for the split camera view 
+ */
 namespace Complete
 {
     public class MaskControl : MonoBehaviour {
 
-        private Mesh m_MaskPlane;
-        private Camera m_Camera;
-        private float m_Angle;
+        private Mesh m_MaskPlane;       // The mask plane reference
+        private Camera m_Camera;        // The camera indeed
+        private float m_Angle;          // The pivot rotation angle
 
         private void Awake()
         {
+            
             m_MaskPlane = gameObject.GetComponentInChildren<MeshFilter>().mesh;
             m_Camera = gameObject.GetComponentInParent<Camera>();
         }
-        // Use this for initialization
-        void Start() {
-            
-        }
 
-        // Update is called once per frame
-        //FixedUpdate[TODO]
         private void LateUpdate() {
             Resize();
             PointToTarget();
