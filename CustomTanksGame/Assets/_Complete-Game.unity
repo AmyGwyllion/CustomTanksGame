@@ -1350,7 +1350,8 @@ MonoBehaviour:
   m_Slider: {fileID: 1342827652}
   m_FillImage: {fileID: 766000543}
   m_Color: {r: 0, g: 1, b: 0, a: 0}
-  CheckPoints: []
+  CheckPoints:
+  - {fileID: 1987648345}
 --- !u!1 &1391056259
 GameObject:
   m_ObjectHideFlags: 0
@@ -1764,7 +1765,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 173472, guid: 756d3a6506f2f8241b4e8badde68567a, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22459830, guid: 756d3a6506f2f8241b4e8badde68567a, type: 2}
       propertyPath: m_AnchoredPosition.y
@@ -1830,7 +1831,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.85
+  m_Radius: 1.59
   m_Height: 4.33
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
