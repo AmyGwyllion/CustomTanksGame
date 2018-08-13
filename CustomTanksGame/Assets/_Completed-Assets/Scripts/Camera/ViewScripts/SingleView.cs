@@ -39,7 +39,7 @@ namespace Complete
             Vector3 target = m_CameraControl.GetComponentInParent<CameraManager>().GetAveragePosition();
 
             // Smoothly transition to that position.
-            m_CameraControl.transform.position = Vector3.SmoothDamp(m_CameraControl.transform.position, target, ref m_MoveVelocity, DampTime);
+            if (!thereAreBounds) m_CameraControl.transform.position = Vector3.SmoothDamp(m_CameraControl.transform.position, target, ref m_MoveVelocity, DampTime);
         }
 
         public override void Zoom(float DampTime)

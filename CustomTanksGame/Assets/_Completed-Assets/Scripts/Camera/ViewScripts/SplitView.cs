@@ -38,16 +38,17 @@ namespace Complete
             // Find the desired camera position
             Vector3 pos = m_CameraControl.GetComponentInParent<CameraManager>().GetAveragePosition() - m_Player.transform.position;
             Vector3 target = m_Player.position + pos/3;
-            
+            bool thereAreBounds = checkForBounds(target - m_CameraControl.transform.position);
             // Smoothly transition to that position.
-            m_CameraControl.transform.position = Vector3.SmoothDamp(m_CameraControl.transform.position, target, ref m_MoveVelocity, DampTime);
+            if (!thereAreBounds) m_CameraControl.transform.position = Vector3.SmoothDamp(m_CameraControl.transform.position, target, ref m_MoveVelocity, DampTime);
+            //else Debug.Log("Bounds here");
         }
 
         public override void Zoom( float DampTime)
         {
             // Find the required size based on the desired position and smoothly transition to that size.
-            float requiredSize = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
-            m_Camera.orthographicSize = Mathf.SmoothDamp(m_Camera.orthographicSize, requiredSize, ref m_ZoomSpeed, DampTime);
+            //float requiredSize = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
+            m_Camera.orthographicSize = 10.0f;
         }
     }
 }

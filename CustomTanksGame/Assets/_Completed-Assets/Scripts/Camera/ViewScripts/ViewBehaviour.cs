@@ -38,7 +38,7 @@ namespace Complete
         }
 
         // Returns the class of the child class
-        public E_VIEWCLASS GetViewClass()
+        public E_VIEWCLASS GetClass()
         {
             return m_Class;
         }
@@ -62,112 +62,110 @@ namespace Complete
         {
             if(target!=null) m_Player = target;
         }
+
+        //Check if there are any world bounds in that direction
+        protected bool checkForBounds(Vector3 direction)
+        {
+            return CheckBotLeft(direction) || CheckBotRight(direction) || CheckTopLeft(direction) ||CheckTopRight(direction);
+        }
+
+        // Si en la proxima posicion de la camara encontramos el borde del mundo
+        private bool CheckBotLeft(Vector3 direction)
+        {
+            int layerMask = LayerMask.GetMask("WorldRaycastBounds");
+
+            //La coordenada de la esquina en el mundo
+            Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(0, 0, m_Camera.nearClipPlane));
+
+            // Le sumamos la direccion a la que se dirige
+            pos += direction;
+
+            //Lanzamos un raycast desde esa posicion para ver si colisiona con algo
+            if (!Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layerMask))
+                return true;
+
+            // If we hit the map bounds
+            return false;
+        }
+
+        // Si en la proxima posicion de la camara encontramos el borde del mundo
+        private bool CheckBotRight(Vector3 direction)
+        {
+            int layerMask = LayerMask.GetMask("WorldRaycastBounds");
+
+            //La coordenada de la esquina en el mundo
+            Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(0, 1, m_Camera.nearClipPlane));
+
+            // Le sumamos la direccion a la que se dirige
+            pos += direction;
+
+            //Lanzamos un raycast desde esa posicion para ver si colisiona con algo
+            if (!Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layerMask))
+                return true;
+
+            // If we hit the map bounds
+            return false;
+        }
+
+        // Si en la proxima posicion de la camara encontramos el borde del mundo
+        private bool CheckTopLeft(Vector3 direction)
+        {
+            int layerMask = LayerMask.GetMask("WorldRaycastBounds");
+
+            //La coordenada de la esquina en el mundo
+            Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(1, 0, m_Camera.nearClipPlane));
+
+            // Le sumamos la direccion a la que se dirige
+            pos += direction;
+
+            //Lanzamos un raycast desde esa posicion para ver si colisiona con algo
+            if (!Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layerMask))
+                return true;
+
+            // If we hit the map bounds
+            return false;
+        }
+
+        // Si en la proxima posicion de la camara encontramos el borde del mundo
+        private bool CheckTopRight(Vector3 direction)
+        {
+            int layerMask = LayerMask.GetMask("WorldRaycastBounds");
+
+            //La coordenada de la esquina en el mundo
+            Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(1, 1, m_Camera.nearClipPlane));
+
+            // Le sumamos la direccion a la que se dirige
+            pos += direction;
+
+            //Lanzamos un raycast desde esa posicion para ver si colisiona con algo
+            if (!Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layerMask))
+                return true;
+
+            // If we hit the map bounds
+            return false;
+        }
+
         /*
-        protected bool CheckIfClamping(Vector3 newPosition) {
-            bool toRet = false;
+        private void Move ()
+        {
+            // Find the average position of the targets.
+            m_AveragePosition = GetComponentInParent<CameraManager>().GetAveragePosition();
 
-            toRet = ClampTopLeft(newPosition);
+            // Smoothly transition to that position.
+            //transform.position = Vector3.SmoothDamp(transform.position, m_AveragePosition, ref m_MoveVelocity, m_DampTime);
 
-            return toRet;
-            //return ClampBotLeft(newPosition) || ClampTopLeft(newPosition) || ClampBotRight(newPosition) || ClampTopRight(newPosition);
+            //Follow the player
+            Vector3 newPosition = new Vector3(m_Target.position.x, transform.position.y, m_Target.position.z);
+            transform.position = Vector3.SmoothDamp(transform.position, newPosition, ref m_MoveVelocity, m_DampTime);
         }
 
-        private Vector3 GetDirection(Vector3 from, Vector3 to)
+        private void Zoom ()
         {
-            Vector3 toRet = Vector3.zero;
-
-            Vector3 headsTo = from - to;
-            float lenght = headsTo.magnitude;
-            //Vector3 direction = headsTo / lenght;
-
-            return toRet;
+            // Find the required size based on the desired position and smoothly transition to that size.
+            float requiredSize = GetComponentInParent<CameraManager>().GetRequiredSize(this);
+            m_Camera.orthographicSize = Mathf.SmoothDamp (m_Camera.orthographicSize, requiredSize, ref m_ZoomSpeed, m_DampTime);
         }
-
-        protected bool ClampBotLeft(Vector3 newPosition)
-        {
-            bool toRet = false;
-            int layerMask = LayerMask.GetMask("WorldRaycastBounds");
-            RaycastHit hit;
-            Ray rayBotLeft = m_Camera.ViewportPointToRay(new Vector3(0.0f, 0.0f, 0.0f));
-            if (!Physics.Raycast(rayBotLeft, out hit, float.PositiveInfinity, layerMask))
-            {
-                Vector3 clampPoint = m_Camera.ViewportToWorldPoint(hit.point); 
-                if (GetDirection(m_Player.position, newPosition) == GetDirection(m_Player.position, clampPoint)) toRet = true;
-                Debug.Log("Clamp Bot Left at" + clampPoint);
-            }
-            return toRet;
-        }
-
-        public bool ClampTopLeft(Vector3 newPosition)
-        {
-            bool toRet = false;
-            int layerMask = LayerMask.GetMask("WorldRaycastBounds");
-            RaycastHit hit;
-            Ray rayTopLeft = m_Camera.ViewportPointToRay(new Vector3(0.0f, 1.0f, 0.0f));
-            if (!Physics.Raycast(rayTopLeft, out hit, float.PositiveInfinity, layerMask))
-            {
-                Vector3 clampPoint = m_Camera.ViewportToWorldPoint(hit.point);
-                //if (GetDirection(m_Player.position, newPosition) == GetDirection(m_Player.position, clampPoint)) toRet = true;
-                //Debug.Log("Clamp Top Left at" + clampPoint);
-
-                float pDir = 0.0f;
-                Vector3 from = new Vector3(m_Player.transform.forward.x, 0, m_Player.transform.forward.z);
-                //Vector3 to = new Vector3(clampPoint.x, 0, clampPoint.z);
-                pDir = Vector3.Angle(from, clampPoint);
-
-                Debug.Log("Player direction" + pDir);
-            }
-            return toRet;
-        }
-
-        public bool ClampBotRight(Vector3 newPosition)
-        {
-            bool toRet = false;
-            int layerMask = LayerMask.GetMask("WorldRaycastBounds");
-            RaycastHit hit;
-            Ray rayBotRight = m_Camera.ViewportPointToRay(new Vector3(1.0f, 0.0f, 0.0f));
-            if (!Physics.Raycast(rayBotRight, out hit, float.PositiveInfinity, layerMask))
-            {
-                Vector3 clampPoint = m_Camera.ViewportToWorldPoint(hit.point);
-                if (GetDirection(m_Player.position, newPosition) == GetDirection(m_Player.position, clampPoint)) toRet = true;
-                Debug.Log("Clamp Bot Right at" + clampPoint);
-            }
-            return toRet;
-        }
-
-        public bool ClampTopRight(Vector3 newPosition)
-        {
-            bool toRet = false;
-            int layerMask = LayerMask.GetMask("WorldRaycastBounds");
-            RaycastHit hit;
-            Ray rayTopRight = m_Camera.ViewportPointToRay(new Vector3(1.0f, 1.0f, 0.0f));
-            if (!Physics.Raycast(rayTopRight, out hit, float.PositiveInfinity, layerMask))
-            {
-                Vector3 clampPoint = m_Camera.ViewportToWorldPoint(hit.point);
-                if (GetDirection(m_Player.position, newPosition) == GetDirection(m_Player.position, clampPoint)) toRet = true;
-                Debug.Log("Clamp Top Right at" + clampPoint);
-            }
-            return toRet;
-        }
-
-
-        protected Vector3 GetClampNewPosition(Vector3 position)
-        {
-            /*
-            Debug.Log("clamp position: " + m_ClampWorldPoint);
-            Debug.Log("initial position: " + position);
-            if (m_Clamp)
-            {
-                float cXPos = Mathf.Abs(m_ClampWorldPoint.x);
-                float cZPos = Mathf.Abs(m_ClampWorldPoint.z);
-
-                if (position.x > cXPos) position.x = m_ClampWorldPoint.x;
-                if (position.z > cZPos) position.z = m_ClampWorldPoint.z;
-            }
-            Debug.Log("final position: " + position);
-            
-            return position;
-        }*/
+        */
 
     }
 }

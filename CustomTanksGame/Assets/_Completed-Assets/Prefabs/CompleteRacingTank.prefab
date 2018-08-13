@@ -990,7 +990,8 @@ MonoBehaviour:
   m_PlayerNumber: 0
   m_Slider: {fileID: 114839237696028450}
   m_FillImage: {fileID: 114982921018052748}
-  m_Color: {r: 0, g: 1, b: 0, a: 0}
+  m_NearColor: {r: 0, g: 1, b: 0, a: 1}
+  m_FarColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &114295813865441714
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -12,9 +12,9 @@ namespace Complete
         [HideInInspector] public int m_PlayerNumber;        // The number of the player associated, set by TankManager
         
         public Slider m_Slider;                             // The slider to represent the player's quiet status time left
-        public Image m_FillImage;                           // The image component of the slider.
-        public Color m_QuietColor = Color.gray;            // The color the health bar will be when on full health.
-        public Color m_NotQuietColor = Color.green;        // The color the health bar will be when on no health.
+        public Image m_FillImage;                           // The image component of the slider
+        public Color m_QuietColor = Color.gray;            // The color the health bar will be when is quiet
+        public Color m_NotQuietColor = Color.green;        // The color the health bar will be when is not quiet
 
         private bool m_IsQuiet;                             // Flag for knowing if the player is in a quiet state
         private float m_QuietTimeCount;                     // Timer for counting the seconds this player is going to be quiet

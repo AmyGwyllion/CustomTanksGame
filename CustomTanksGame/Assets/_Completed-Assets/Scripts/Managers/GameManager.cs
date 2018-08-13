@@ -34,6 +34,7 @@ namespace Complete
 
         private void Start()
         {
+            // Initialize variables
             m_PlayerByNumber = new Dictionary<int, TankManager>();
 
             // Create the delays so they only have to be made once.
@@ -43,7 +44,7 @@ namespace Complete
 
             // Initialize the position, mode, target and zoom for all the player cameras
             m_CameraManager.SetPlayers(m_Tanks);
-            m_CameraManager.SetCameraTarget();
+            m_CameraManager.SetAllCameraTargets();
 
             // Once the tanks have been created and the cameras are using them as targets, start the game.
             StartCoroutine (GameLoop ());

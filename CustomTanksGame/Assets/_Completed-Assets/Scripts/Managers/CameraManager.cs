@@ -8,8 +8,8 @@ namespace Complete {
     public class CameraManager : MonoBehaviour {
 
         public float MaxPlayerDistance;                             // The maximum distance the players can be before whe split the camera view
-        private TankManager[] m_Players;                            // All player objects in scene, GameManager populates it using the set method down below
-        private Transform[] m_PTransforms;                          // All player transforms
+        private TankManager[] m_Players;                            // All player objects in scene,                                                 populated by GameManager at START()
+        private Transform[] m_PTransforms;                          // All player transforms,                                                       populated by GameManager at START()
         private List<CameraControl> m_Cameras;                      // All Cameras Controllers
         private Dictionary<int, CameraControl> m_PlayerCamera;      // All cameras by player number
 
@@ -28,7 +28,8 @@ namespace Complete {
             //Get all camera childs
             foreach (Transform child in transform) m_Cameras.Add(child.gameObject.GetComponent<CameraControl>());
         }
-
+         
+        // This function is called by the RoundStarting() coroutine, in GameLoop(), at GameManager START() function
         public void Initialize()
         {
             // Create a collection of transforms the same size as the number of tanks.
@@ -44,6 +45,21 @@ namespace Complete {
 
             for (int i = 0; i < m_Cameras.Count; i++) {
                 m_Cameras[i].SetStartPositionAndSize();
+            }
+        }
+
+        // This function is called by the GameManager for populating the players array at his START() function
+        public void SetPlayers(TankManager[] players) {
+            if(players!=null) m_Players = players;
+        }
+
+        // This function is called by the GameManager for linkinkg cameras to players at his START() function
+        public void SetAllCameraTargets()
+        {
+            for (int i = 0; i < m_Players.Length && i< m_Cameras.Count; i++)
+            {
+                m_PlayerCamera.Add(m_Players[i].m_PlayerNumber, m_Cameras[i]);
+                m_Cameras[i].SetTarget(m_Players[i].m_Instance.transform);
             }
         }
 
@@ -85,15 +101,6 @@ namespace Complete {
            
         }
 
-        public void SetCameraTarget()
-        {
-            for (int i = 0; i < m_Players.Length && i< m_Cameras.Count; i++)
-            {
-                m_PlayerCamera.Add(m_Players[i].m_PlayerNumber, m_Cameras[i]);
-                m_Cameras[i].SetTarget(m_Players[i].m_Instance.transform);
-            }
-        }
-
         // This method is used from external scripts
         public Vector3 GetAveragePosition()
         {
@@ -123,6 +130,7 @@ namespace Complete {
             return averagePos;
         }
 
+        // This method is used from external scripts
         public float GetRequiredSize(CameraControl targetCamera)
         {
             // Find the position the camera rig is moving towards in its local space.
@@ -160,8 +168,5 @@ namespace Complete {
             return size;
         }
 
-        public void SetPlayers(TankManager[] players) {
-            if(players!=null) m_Players = players;
-        }
     }
 }
