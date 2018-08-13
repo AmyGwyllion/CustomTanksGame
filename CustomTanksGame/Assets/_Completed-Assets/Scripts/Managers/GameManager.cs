@@ -63,6 +63,7 @@ namespace Complete
                 m_Tanks[i].m_PlayerNumber = i + 1;
                 m_Tanks[i].Setup(m_Checkpoints);
                 m_PlayerByNumber.Add(i + 1, m_Tanks[i]);
+                PrintLapInfo(m_Tanks[i]);
             }
         }
 
@@ -270,9 +271,13 @@ namespace Complete
         {
             TankManager player = m_PlayerByNumber[playerNumber];
             player.m_Laps++;
-            player.m_LapDial.text = "LAPS: " + player.m_Laps.ToString() + "/" + m_LapsToWin;
+            PrintLapInfo(player);
+        }
 
-            Debug.Log("Player " + playerNumber + " Laps : " + m_PlayerByNumber[playerNumber].m_Laps);
+        private void PrintLapInfo(TankManager player)
+        {
+            string info = "<color=#" + ColorUtility.ToHtmlStringRGB(player.m_PlayerColor) + ">LAPS: " + player.m_Laps.ToString() + "/" + m_LapsToWin + "</color>";
+            player.m_LapDial.text = info;
         }
 
         // This function is used to turn all the tanks back on and reset their positions and properties.
