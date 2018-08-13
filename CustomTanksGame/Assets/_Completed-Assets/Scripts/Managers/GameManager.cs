@@ -24,7 +24,9 @@ namespace Complete
 
         //[NEW]
         public CameraManager m_CameraManager;
-
+        public Transform[] m_Checkpoints;
+        public Button m_Button;
+        private bool m_PlayAgain;
 
         private void Start()
         {
@@ -53,7 +55,7 @@ namespace Complete
                 m_Tanks[i].m_Instance =
                     Instantiate(m_TankPrefab, m_Tanks[i].m_SpawnPoint.position, m_Tanks[i].m_SpawnPoint.rotation) as GameObject;
                 m_Tanks[i].m_PlayerNumber = i + 1;
-                m_Tanks[i].Setup();
+                m_Tanks[i].Setup(m_Checkpoints);
             }
         }
 
@@ -144,8 +146,10 @@ namespace Complete
 
         private IEnumerator RoundEnding ()
         {
+            m_PlayAgain = false;
+
             // Stop tanks from moving.
-            DisableTankControl ();
+            DisableTankControl();
 
             // Clear the winner from the previous round.
             m_RoundWinner = null;
@@ -165,7 +169,8 @@ namespace Complete
             m_MessageText.text = message;
 
             // Wait for the specified length of time until yielding control back to the game loop.
-            yield return m_EndWait;
+            //yield return m_EndWait;
+            while (!m_PlayAgain) yield return null;
         }
 
 
@@ -245,6 +250,11 @@ namespace Complete
                 message = m_GameWinner.m_ColoredPlayerText + " WINS THE GAME!";
 
             return message;
+        }
+
+        public void PlayAgain()
+        {
+            m_PlayAgain = true;
         }
 
 

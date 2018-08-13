@@ -8,7 +8,7 @@ namespace Complete {
 
         private void OnTriggerEnter(Collider player)
         {
-            Debug.Log(player.GetComponentInParent<TankMovement>().m_PlayerNumber);
+            player.GetComponentInParent<TankCompass>().HitCheckpoint(transform);
         }
     }
 }
