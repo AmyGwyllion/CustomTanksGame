@@ -29,6 +29,7 @@ namespace Complete
         public void Setup (Transform[] checkpoints)
         {
             m_Laps = 0;
+            m_LapDial.text = string.Empty;
 
             // Get references to the components.
             m_Movement = m_Instance.GetComponent<TankMovement> ();
@@ -82,6 +83,8 @@ namespace Complete
         // Used at the start of each round to put the tank into it's default state.
         public void Reset ()
         {
+            m_Laps = 0;
+
             m_Instance.transform.position = m_SpawnPoint.position;
             m_Instance.transform.rotation = m_SpawnPoint.rotation;
 

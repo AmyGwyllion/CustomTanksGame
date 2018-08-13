@@ -362,7 +362,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &346646513
 RectTransform:
   m_ObjectHideFlags: 0
@@ -375,7 +375,7 @@ RectTransform:
   m_Children:
   - {fileID: 487985657}
   m_Father: {fileID: 575313012}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -837,8 +837,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 102963700}
-  - {fileID: 346646513}
   - {fileID: 1110062189}
+  - {fileID: 346646513}
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1146,7 +1146,7 @@ RectTransform:
   - {fileID: 2117000070}
   - {fileID: 2061044004}
   m_Father: {fileID: 575313012}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1386,10 +1386,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54a000792783c934885973b761b3f96f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_NumRoundsToWin: 1
   m_LapsToWin: 3
   m_StartDelay: 3
   m_EndDelay: 3
+  m_CameraManager: {fileID: 761523292}
   m_MessageText: {fileID: 102963701}
   m_TankPrefab: {fileID: 1858309144510962, guid: 73d2cb82cf08b0d48bd272bfe1f76df8,
     type: 2}
@@ -1413,7 +1413,6 @@ MonoBehaviour:
   m_Checkpoints:
   - {fileID: 1987648345}
   - {fileID: 1039455406}
-  m_CameraManager: {fileID: 761523292}
   m_Button: {fileID: 346646515}
 --- !u!4 &1304999366
 Transform:
