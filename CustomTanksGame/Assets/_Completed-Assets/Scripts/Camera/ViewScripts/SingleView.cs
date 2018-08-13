@@ -37,6 +37,7 @@ namespace Complete
         {
             // Find the average position of the targets.
             Vector3 target = m_CameraControl.GetComponentInParent<CameraManager>().GetAveragePosition();
+            bool thereAreBounds = checkForBounds(target - m_CameraControl.transform.position);
 
             // Smoothly transition to that position.
             if (!thereAreBounds) m_CameraControl.transform.position = Vector3.SmoothDamp(m_CameraControl.transform.position, target, ref m_MoveVelocity, DampTime);
