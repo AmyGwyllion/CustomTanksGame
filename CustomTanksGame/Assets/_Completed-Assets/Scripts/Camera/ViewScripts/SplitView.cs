@@ -38,10 +38,12 @@ namespace Complete
             // Find the desired camera position
             Vector3 pos = m_CameraControl.GetComponentInParent<CameraManager>().GetAveragePosition() - m_Player.transform.position;
             Vector3 target = m_Player.position + pos/3;
-            bool thereAreBounds = checkForBounds(target - m_CameraControl.transform.position);
+            Vector3 dir = target - m_CameraControl.transform.position;
+            //Debug.Log(dir);
+            bool thereAreBounds = checkForBounds(dir);
             // Smoothly transition to that position.
             if (!thereAreBounds) m_CameraControl.transform.position = Vector3.SmoothDamp(m_CameraControl.transform.position, target, ref m_MoveVelocity, DampTime);
-            //else Debug.Log("Bounds here");
+            else Debug.Log("Bounds here");
         }
 
         public override void Zoom( float DampTime)

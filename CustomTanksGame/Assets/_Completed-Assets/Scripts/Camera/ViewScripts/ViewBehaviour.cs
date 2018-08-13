@@ -66,7 +66,7 @@ namespace Complete
         //Check if there are any world bounds in that direction
         protected bool checkForBounds(Vector3 direction)
         {
-            return CheckBotLeft(direction) || CheckBotRight(direction) || CheckTopLeft(direction) ||CheckTopRight(direction);
+            return /*CheckBotLeft(direction) || CheckBotRight(direction) ||*/ CheckTopLeft(direction);//||CheckTopRight(direction);
         }
 
         // Si en la proxima posicion de la camara encontramos el borde del mundo
@@ -94,7 +94,7 @@ namespace Complete
             int layerMask = LayerMask.GetMask("WorldRaycastBounds");
 
             //La coordenada de la esquina en el mundo
-            Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(0, 1, m_Camera.nearClipPlane));
+            Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(1, 0, m_Camera.nearClipPlane));
 
             // Le sumamos la direccion a la que se dirige
             pos += direction;
@@ -113,7 +113,7 @@ namespace Complete
             int layerMask = LayerMask.GetMask("WorldRaycastBounds");
 
             //La coordenada de la esquina en el mundo
-            Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(1, 0, m_Camera.nearClipPlane));
+            Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(0, 1, m_Camera.nearClipPlane));
 
             // Le sumamos la direccion a la que se dirige
             pos += direction;
