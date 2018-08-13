@@ -18,6 +18,7 @@ namespace Complete
         private float m_CurrentHealth;                      // How much health the tank currently has.
         private bool m_Dead;                                // Has the tank been reduced beyond zero health yet?
         private float m_QuietTime;
+        private float m_TotalQuietTime;
 
         private void Awake ()
         {
@@ -38,6 +39,7 @@ namespace Complete
             m_CurrentHealth = m_StartingHealth;
             m_Dead = false;
             m_QuietTime = 0.0f;
+            m_TotalQuietTime = 0.0f;
 
             // Update the health slider's value and color.
             SetHealthUI();
@@ -48,8 +50,9 @@ namespace Complete
             // If not already quiet
             if (m_QuietTime <= 0.0f)
             {
+                m_TotalQuietTime = time;
                 m_QuietTime = time;
-                GameObject.FindWithTag("GameManager").GetComponent<GameManager>().DisablePlayer(m_PlayerNumber);
+                GameObject.FindWithTag("GameManager").GetComponent<GameManager>().DisablePlayerMovement(m_PlayerNumber);
             }
         }
 
@@ -57,11 +60,15 @@ namespace Complete
         {
             float time = Time.deltaTime;
             //If is quiet
-            if (m_QuietTime - time > 0.0f) m_QuietTime -= time;
+            if (m_QuietTime - time > 0.0f)
+            {
+                m_QuietTime -= time;
+                m_Slider.value = m_StartingHealth - m_QuietTime * (m_StartingHealth / m_TotalQuietTime);
+            }
             else
             {
                 m_QuietTime = 0.0f;
-                GameObject.FindWithTag("GameManager").GetComponent<GameManager>().EnablePlayer(m_PlayerNumber);
+                GameObject.FindWithTag("GameManager").GetComponent<GameManager>().EnablePlayerMovement(m_PlayerNumber);
             }
 
         }

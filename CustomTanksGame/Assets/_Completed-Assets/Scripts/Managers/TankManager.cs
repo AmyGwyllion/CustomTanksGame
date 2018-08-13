@@ -64,12 +64,12 @@ namespace Complete
 
 
         // Used during the phases of the game where the player shouldn't be able to control their tank.
-        public void DisableControl ()
+        public void DisableControl (bool canvasToo = true)
         {
             m_Movement.enabled = false;
             m_Shooting.enabled = false;
 
-            m_CanvasGameObject.SetActive (false);
+            if(canvasToo) m_CanvasGameObject.SetActive (false);
         }
 
 
@@ -81,7 +81,6 @@ namespace Complete
 
             m_CanvasGameObject.SetActive (true);
         }
-
 
         // Used at the start of each round to put the tank into it's default state.
         public void Reset ()
