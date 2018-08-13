@@ -65,7 +65,7 @@ namespace Complete
                 m_QuietTime -= time;
                 m_Slider.value = m_StartingHealth - m_QuietTime * (m_StartingHealth / m_TotalQuietTime);
             }
-            else
+            else if(m_QuietTime > 0.0f)
             {
                 m_QuietTime = 0.0f;
                 GameObject.FindWithTag("GameManager").GetComponent<GameManager>().EnablePlayerMovement(m_PlayerNumber);
