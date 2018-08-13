@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -8,12 +9,14 @@ namespace Complete
     public class GameManager : MonoBehaviour
     {
         public int m_NumRoundsToWin = 5;            // The number of rounds a single player has to win to win the game.
+        public int m_LapsToWin = 3;
         public float m_StartDelay = 3f;             // The delay between the start of RoundStarting and RoundPlaying phases.
         public float m_EndDelay = 3f;               // The delay between the end of RoundPlaying and RoundEnding phases.
         //public CameraControl m_CameraControl;       // Reference to the CameraControl script for control during different phases.
         public Text m_MessageText;                  // Reference to the overlay Text to display winning text, etc.
         public GameObject m_TankPrefab;             // Reference to the prefab the players will control.
         public TankManager[] m_Tanks;               // A collection of managers for enabling and disabling different aspects of the tanks.
+        public Transform[] m_Checkpoints;
 
         
         private int m_RoundNumber;                  // Which round the game is currently on.
@@ -24,12 +27,15 @@ namespace Complete
 
         //[NEW]
         public CameraManager m_CameraManager;
-        public Transform[] m_Checkpoints;
         public Button m_Button;
         private bool m_PlayAgain;
+        private Dictionary<int, TankManager> m_PlayerByNumber;
 
         private void Start()
         {
+            m_Button.gameObject.SetActive(false);
+            m_PlayerByNumber = new Dictionary<int, TankManager>();
+
             // Create the delays so they only have to be made once.
             m_StartWait = new WaitForSeconds (m_StartDelay);
             m_EndWait = new WaitForSeconds (m_EndDelay);
@@ -56,6 +62,7 @@ namespace Complete
                     Instantiate(m_TankPrefab, m_Tanks[i].m_SpawnPoint.position, m_Tanks[i].m_SpawnPoint.rotation) as GameObject;
                 m_Tanks[i].m_PlayerNumber = i + 1;
                 m_Tanks[i].Setup(m_Checkpoints);
+                m_PlayerByNumber.Add(i + 1, m_Tanks[i]);
             }
         }
 
@@ -147,7 +154,7 @@ namespace Complete
         private IEnumerator RoundEnding ()
         {
             m_PlayAgain = false;
-
+            m_Button.gameObject.SetActive(true);
             // Stop tanks from moving.
             DisableTankControl();
 
@@ -217,7 +224,9 @@ namespace Complete
             for (int i = 0; i < m_Tanks.Length; i++)
             {
                 // ... and if one of them has enough rounds to win the game, return it.
-                if (m_Tanks[i].m_Wins == m_NumRoundsToWin)
+                //if (m_Tanks[i].m_Wins == m_NumRoundsToWin)
+                //return m_Tanks[i];
+                if (m_Tanks[i].m_Laps == m_LapsToWin)
                     return m_Tanks[i];
             }
 
@@ -257,6 +266,14 @@ namespace Complete
             m_PlayAgain = true;
         }
 
+        public void AddLap(int playerNumber)
+        {
+            TankManager player = m_PlayerByNumber[playerNumber];
+            player.m_Laps++;
+            player.m_LapDial.text = "LAPS: " + player.m_Laps.ToString() + "/" + m_LapsToWin;
+
+            Debug.Log("Player " + playerNumber + " Laps : " + m_PlayerByNumber[playerNumber].m_Laps);
+        }
 
         // This function is used to turn all the tanks back on and reset their positions and properties.
         private void ResetAllTanks()
