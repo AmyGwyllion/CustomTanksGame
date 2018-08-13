@@ -13,8 +13,8 @@ namespace Complete
         
         public Slider m_Slider;                             // The slider to represent the player's quiet status time left
         public Image m_FillImage;                           // The image component of the slider.
-        public Color m_QuietColor = Color.green;            // The color the health bar will be when on full health.
-        public Color m_NotQuietColor = Color.yellow;        // The color the health bar will be when on no health.
+        public Color m_QuietColor = Color.gray;            // The color the health bar will be when on full health.
+        public Color m_NotQuietColor = Color.green;        // The color the health bar will be when on no health.
 
         private bool m_IsQuiet;                             // Flag for knowing if the player is in a quiet state
         private float m_QuietTimeCount;                     // Timer for counting the seconds this player is going to be quiet
@@ -40,7 +40,7 @@ namespace Complete
         private void SetTankStatusUI()
         {
             // Interpolate the color of the bar between the choosen colours based on the current percentage of the starting health.
-            m_FillImage.color = Color.Lerp (m_NotQuietColor, m_QuietColor, m_Slider.value / m_Slider.maxValue);
+            m_FillImage.color = Color.Lerp (m_QuietColor , m_NotQuietColor, m_Slider.value / m_Slider.maxValue);
         }
 
         public void StayQuiet(float time)
@@ -72,7 +72,7 @@ namespace Complete
 
                 // Update the slider value (per relative percentage)
                 m_Slider.value = m_Slider.maxValue - m_QuietTimeCount * (m_Slider.maxValue / m_TotalQuietTime);
-                m_FillImage.color = Color.Lerp(m_NotQuietColor, m_QuietColor, m_Slider.value / m_Slider.maxValue);
+                m_FillImage.color = Color.Lerp(m_QuietColor, m_NotQuietColor, m_Slider.value / m_Slider.maxValue);
             }
             // If the player is not quiet anymore
             else if(m_IsQuiet && m_QuietTimeCount <= 0)

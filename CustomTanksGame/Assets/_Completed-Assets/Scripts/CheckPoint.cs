@@ -12,7 +12,7 @@ namespace Complete {
             // If it has a TankCompass script attatched to it we can say is a player
             TankCompass player = collider.GetComponentInParent<TankCompass>();
             if (player != null)
-                player.HitCheckpoint(transform); // Notify the player that he stepped on you
+                player.HitCheckpoint(transform); // Notify the player that he stepped on you (how rude...)
         }
 
     }

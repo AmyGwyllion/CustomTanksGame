@@ -971,12 +971,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 030896d0325fa3e4d8d7d4cfe2351cb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_StartingHealth: 100
+  m_PlayerNumber: 0
   m_Slider: {fileID: 114128496847594728}
   m_FillImage: {fileID: 114692597505327140}
-  m_FullHealthColor: {r: 0, g: 1, b: 0, a: 1}
-  m_ZeroHealthColor: {r: 1, g: 0, b: 0, a: 1}
-  m_ExplosionPrefab: {fileID: 151086, guid: 6bc6d0dd8b8428e4ca316513f2cf13c6, type: 2}
+  m_QuietColor: {r: 0.49019608, g: 0.49019608, b: 0.49019608, a: 1}
+  m_NotQuietColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!114 &114280363132227428
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -988,6 +987,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe190b8171e798f449b235eb22c2c8e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_PlayerNumber: 0
   m_Slider: {fileID: 114839237696028450}
   m_FillImage: {fileID: 114982921018052748}
   m_Color: {r: 0, g: 1, b: 0, a: 0}

@@ -19,7 +19,6 @@ namespace Complete
             Destroy (gameObject, m_MaxLifeTime);
         }
 
-
         private void OnTriggerEnter (Collider other)
         {
 			// Collect all the colliders in a sphere from the shell's current position to a radius of the explosion radius.

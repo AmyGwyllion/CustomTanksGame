@@ -1,31 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Complete
 {
     public class GameManager : MonoBehaviour
     {
-        public int m_LapsToWin = 3;                             // The number of laps for winning the round
+
+        public int m_LapsToWin = 3;                             // The number of laps for winning the round.
         public float m_StartDelay = 3f;                         // The delay between the start of RoundStarting and RoundPlaying phases.
         public float m_EndDelay = 3f;                           // The delay between the end of RoundPlaying and RoundEnding phases.
         public CameraManager m_CameraManager;                   // Reference to the CameraControl script for control during different phases.
         public Text m_MessageText;                              // Reference to the overlay Text to display winning text, etc.
         public GameObject m_TankPrefab;                         // Reference to the prefab the players will control.
         public TankManager[] m_Tanks;                           // A collection of managers for enabling and disabling different aspects of the tanks.
-        public Transform[] m_Checkpoints;                       // All the checkpoints for completing a lap
+        public Transform[] m_Checkpoints;                       // All the checkpoints for completing a lap, the first of all is considered the racing start point.
         
         private int m_RoundNumber;                              // Which round the game is currently on.
         private WaitForSeconds m_StartWait;                     // Used to have a delay whilst the round starts.
-        //private WaitForSeconds m_EndWait;                      // Used to have a delay whilst the round or game ends.
         private TankManager m_RoundWinner;                      // Reference to the winner of the current round.  Used to make an announcement of who won.
         private TankManager m_GameWinner;                       // Reference to the winner of the game.  Used to make an announcement of who won.
         
         public Button m_Button;                                 // Play Again Button
         private bool m_PlayAgain;                               // Flag for the play again button
-        private Dictionary<int, TankManager> m_PlayerByNumber;  // All the players sorted by their player number
+        private Dictionary<int, TankManager> m_PlayerByNumber;  // All the players sorted by their player number, used for accesing from other scripts that have a reference of the player number
+
+        private void Awake()
+        {
+            // Set a tag for this game object for enabling other scripts to acces some functions
+            gameObject.tag = "GameManager";
+        }
 
         private void Start()
         {
@@ -33,7 +38,6 @@ namespace Complete
 
             // Create the delays so they only have to be made once.
             m_StartWait = new WaitForSeconds (m_StartDelay);
-            //m_EndWait = new WaitForSeconds (m_EndDelay);
 
             SpawnAllTanks();
 
@@ -54,8 +58,12 @@ namespace Complete
                 m_Tanks[i].m_Instance =
                     Instantiate(m_TankPrefab, m_Tanks[i].m_SpawnPoint.position, m_Tanks[i].m_SpawnPoint.rotation) as GameObject;
                 m_Tanks[i].m_PlayerNumber = i + 1;
-                m_Tanks[i].Setup(m_Checkpoints);            // Give the players the position of the checkpoints they have to reach
-                m_PlayerByNumber.Add(i + 1, m_Tanks[i]);    // Populate the player by number player dictionary
+
+                // Give the players the position of the checkpoints they have to reach
+                m_Tanks[i].Setup(m_Checkpoints);
+
+                // Populate the player by number player dictionary
+                m_PlayerByNumber.Add(i + 1, m_Tanks[i]);
             }
         }
 
@@ -188,25 +196,13 @@ namespace Complete
             m_PlayAgain = true;
         }
 
-        // This function is only called once the player reached all the checkpoints
+        // This function is called once the player reached all the checkpoints
         // Increments the player laps by one and updates his lap dial on screen
         public void AddLap(int playerNumber)
         {
             TankManager player = m_PlayerByNumber[playerNumber];
             player.m_Laps++;
             PrintLapInfo(player);
-        }
-
-        public void EnablePlayerMovement(int playerNumber)
-        {
-            TankManager player = m_PlayerByNumber[playerNumber];
-            player.EnableControl();
-        }
-
-        public void DisablePlayerMovement(int playerNumber)
-        {
-            TankManager player = m_PlayerByNumber[playerNumber];
-            player.DisableControl(false);
         }
 
         // This function prints the current lap of the player 
@@ -226,7 +222,20 @@ namespace Complete
             }
         }
 
+        // The next two functions are called once the player has been hit by a shell and we dont want to disable the tank UI too
+        public void EnablePlayerMovement(int playerNumber)
+        {
+            TankManager player = m_PlayerByNumber[playerNumber];
+            player.EnableControl();
+        }
 
+        public void DisablePlayerMovement(int playerNumber)
+        {
+            TankManager player = m_PlayerByNumber[playerNumber];
+            player.DisableControl(false);
+        }
+
+        //Functions for full disabling the tank controls and UI
         private void EnableTankControl()
         {
             for (int i = 0; i < m_Tanks.Length; i++)
@@ -235,7 +244,6 @@ namespace Complete
             }
         }
 
-
         private void DisableTankControl()
         {
             for (int i = 0; i < m_Tanks.Length; i++)
@@ -243,5 +251,6 @@ namespace Complete
                 m_Tanks[i].DisableControl();
             }
         }
+
     }
 }

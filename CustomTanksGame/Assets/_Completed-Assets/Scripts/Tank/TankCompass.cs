@@ -13,7 +13,8 @@ namespace Complete
 
         public Slider m_Slider;                             // The slider to represent how far is the player from the checkpoint
         public Image m_FillImage;                           // The arrow image component of the slider
-        public Color m_Color = Color.green;                 // The arrow color
+        public Color m_NearColor = Color.green;             // The arrow color
+        public Color m_FarColor = Color.gray;               // The arrow color
 
         private Transform[] m_Checkpoints;                  // All the checkpoints, set by TankManager
         private int m_Next;                                 // Next checkpoint index to be reached
@@ -61,11 +62,14 @@ namespace Complete
             float distance = (m_Checkpoints[m_Next].position - m_Slider.transform.position).magnitude;
 
             // Now we calculate the new distance and clamp it to the slider min and max values
-            distance = distance / factor;
+            distance *= factor;
             distance = Mathf.Clamp(distance, m_Slider.minValue, m_Slider.maxValue);
 
             // Update the value
             m_Slider.value = distance;
+
+            //Change the arrow color
+            m_FillImage.color = Color.Lerp(m_NearColor, m_FarColor, distance/m_Slider.maxValue);
         }
 
         // This function is triggered when a checkpoint collides with the player, triggered by Checkpoint script
