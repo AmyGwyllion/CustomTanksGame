@@ -19,7 +19,7 @@ namespace Complete
         
         private int m_RoundNumber;                              // Which round the game is currently on.
         private WaitForSeconds m_StartWait;                     // Used to have a delay whilst the round starts.
-        private WaitForSeconds m_EndWait;                       // Used to have a delay whilst the round or game ends.
+        //private WaitForSeconds m_EndWait;                      // Used to have a delay whilst the round or game ends.
         private TankManager m_RoundWinner;                      // Reference to the winner of the current round.  Used to make an announcement of who won.
         private TankManager m_GameWinner;                       // Reference to the winner of the game.  Used to make an announcement of who won.
         
@@ -33,7 +33,7 @@ namespace Complete
 
             // Create the delays so they only have to be made once.
             m_StartWait = new WaitForSeconds (m_StartDelay);
-            m_EndWait = new WaitForSeconds (m_EndDelay);
+            //m_EndWait = new WaitForSeconds (m_EndDelay);
 
             SpawnAllTanks();
 

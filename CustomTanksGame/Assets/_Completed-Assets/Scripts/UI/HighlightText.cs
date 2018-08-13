@@ -2,7 +2,9 @@
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-//A simple class for animating the Play Again button text
+/**
+ * A simple script for animating the Play Again button text
+ */
 public class HighlightText : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
 

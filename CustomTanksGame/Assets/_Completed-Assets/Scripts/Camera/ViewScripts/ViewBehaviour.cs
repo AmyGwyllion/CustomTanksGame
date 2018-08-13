@@ -60,7 +60,7 @@ namespace Complete
 
             Vector3 headsTo = from - to;
             float lenght = headsTo.magnitude;
-            Vector3 direction = headsTo / lenght;
+            //Vector3 direction = headsTo / lenght;
 
             return toRet;
         }
@@ -94,7 +94,7 @@ namespace Complete
 
                 float pDir = 0.0f;
                 Vector3 from = new Vector3(m_Target.transform.forward.x, 0, m_Target.transform.forward.z);
-                Vector3 to = new Vector3(clampPoint.x, 0, clampPoint.z);
+                //Vector3 to = new Vector3(clampPoint.x, 0, clampPoint.z);
                 pDir = Vector3.Angle(from, clampPoint);
 
                 Debug.Log("Player direction" + pDir);
