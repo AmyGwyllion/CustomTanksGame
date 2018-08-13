@@ -197,6 +197,18 @@ namespace Complete
             PrintLapInfo(player);
         }
 
+        public void EnablePlayer(int playerNumber)
+        {
+            TankManager player = m_PlayerByNumber[playerNumber];
+            player.EnableControl();
+        }
+
+        public void DisablePlayer(int playerNumber)
+        {
+            TankManager player = m_PlayerByNumber[playerNumber];
+            player.DisableControl();
+        }
+
         // This function prints the current lap of the player 
         private void PrintLapInfo(TankManager player)
         {

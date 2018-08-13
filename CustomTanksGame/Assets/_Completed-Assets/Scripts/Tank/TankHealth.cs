@@ -11,13 +11,13 @@ namespace Complete
         public Color m_FullHealthColor = Color.green;       // The color the health bar will be when on full health.
         public Color m_ZeroHealthColor = Color.red;         // The color the health bar will be when on no health.
         public GameObject m_ExplosionPrefab;                // A prefab that will be instantiated in Awake, then used whenever the tank dies.
-        
-        
+
+        [HideInInspector] public int m_PlayerNumber;
         private AudioSource m_ExplosionAudio;               // The audio source to play when the tank explodes.
         private ParticleSystem m_ExplosionParticles;        // The particle system the will play when the tank is destroyed.
         private float m_CurrentHealth;                      // How much health the tank currently has.
         private bool m_Dead;                                // Has the tank been reduced beyond zero health yet?
-
+        private float m_QuietTime;
 
         private void Awake ()
         {
@@ -37,11 +37,34 @@ namespace Complete
             // When the tank is enabled, reset the tank's health and whether or not it's dead.
             m_CurrentHealth = m_StartingHealth;
             m_Dead = false;
+            m_QuietTime = 0.0f;
 
             // Update the health slider's value and color.
             SetHealthUI();
         }
 
+        public void StayQuiet(float time)
+        {
+            // If not already quiet
+            if (m_QuietTime <= 0.0f)
+            {
+                m_QuietTime = time;
+                GameObject.FindWithTag("GameManager").GetComponent<GameManager>().DisablePlayer(m_PlayerNumber);
+            }
+        }
+
+        public void FixedUpdate()
+        {
+            float time = Time.deltaTime;
+            //If is quiet
+            if (m_QuietTime - time > 0.0f) m_QuietTime -= time;
+            else
+            {
+                m_QuietTime = 0.0f;
+                GameObject.FindWithTag("GameManager").GetComponent<GameManager>().EnablePlayer(m_PlayerNumber);
+            }
+
+        }
 
         public void TakeDamage (float amount)
         {

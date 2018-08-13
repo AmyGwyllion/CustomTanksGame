@@ -7,6 +7,7 @@ namespace Complete
         public LayerMask m_TankMask;                        // Used to filter what the explosion affects, this should be set to "Players".
         public ParticleSystem m_ExplosionParticles;         // Reference to the particles that will play on explosion.
         public AudioSource m_ExplosionAudio;                // Reference to the audio that will play on explosion.
+        public float m_QuietTime = 10.0f;                           // Time the target is going to be immobilised
         public float m_MaxDamage = 100f;                    // The amount of damage done if the explosion is centred on a tank.
         public float m_ExplosionForce = 1000f;              // The amount of force added to a tank at the centre of the explosion.
         public float m_MaxLifeTime = 2f;                    // The time in seconds before the shell is removed.
@@ -49,7 +50,8 @@ namespace Complete
                 float damage = CalculateDamage (targetRigidbody.position);
 
                 // Deal this damage to the tank.
-                targetHealth.TakeDamage (damage);
+                //targetHealth.TakeDamage (damage);
+                targetHealth.StayQuiet(m_QuietTime);
             }
 
             // Unparent the particles from the shell.
