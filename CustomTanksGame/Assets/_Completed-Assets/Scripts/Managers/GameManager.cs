@@ -171,7 +171,7 @@ namespace Complete
                 message = m_RoundWinner.m_ColoredPlayerText + " WINS THE ROUND!";
 
             // Add some line breaks after the initial message.
-            message += "\n\n\n\n";
+            message += "\n";
 
             // Go through all the tanks and add each of their scores to the message.
             for (int i = 0; i < m_Tanks.Length; i++)
