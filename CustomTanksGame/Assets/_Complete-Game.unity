@@ -272,7 +272,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &170431709
 BoxCollider:
@@ -312,7 +312,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &203112876
 GameObject:
@@ -322,7 +322,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 203112877}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Checkpoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -342,7 +342,7 @@ Transform:
   - {fileID: 1987648345}
   - {fileID: 1039455406}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &346646512
 GameObject:
@@ -495,6 +495,52 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Text: {fileID: 487985659}
+--- !u!1001 &367988684
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4127211861613562, guid: 73d2cb82cf08b0d48bd272bfe1f76df8, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -2.4606762
+      objectReference: {fileID: 0}
+    - target: {fileID: 4127211861613562, guid: 73d2cb82cf08b0d48bd272bfe1f76df8, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 3.165577
+      objectReference: {fileID: 0}
+    - target: {fileID: 4127211861613562, guid: 73d2cb82cf08b0d48bd272bfe1f76df8, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -15.134537
+      objectReference: {fileID: 0}
+    - target: {fileID: 4127211861613562, guid: 73d2cb82cf08b0d48bd272bfe1f76df8, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4127211861613562, guid: 73d2cb82cf08b0d48bd272bfe1f76df8, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4127211861613562, guid: 73d2cb82cf08b0d48bd272bfe1f76df8, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4127211861613562, guid: 73d2cb82cf08b0d48bd272bfe1f76df8, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4127211861613562, guid: 73d2cb82cf08b0d48bd272bfe1f76df8, type: 2}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1858309144510962, guid: 73d2cb82cf08b0d48bd272bfe1f76df8, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 73d2cb82cf08b0d48bd272bfe1f76df8, type: 2}
+  m_IsPrefabAsset: 0
 --- !u!1 &393163983
 GameObject:
   m_ObjectHideFlags: 0
@@ -506,7 +552,7 @@ GameObject:
   - component: {fileID: 393163987}
   - component: {fileID: 393163986}
   - component: {fileID: 393163985}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -853,7 +899,7 @@ RectTransform:
   - {fileID: 1110062189}
   - {fileID: 346646513}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -868,7 +914,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 609256972}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -896,7 +942,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 671717554}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -969,7 +1015,7 @@ GameObject:
   - component: {fileID: 1039455406}
   - component: {fileID: 1039455408}
   - component: {fileID: 1039455407}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Checkpoint (1)
   m_TagString: Untagged
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
@@ -1002,7 +1048,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 897138e394cb9c042b58829ce008e412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IsStartPoint: 1
 --- !u!136 &1039455408
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1026,7 +1071,7 @@ GameObject:
   - component: {fileID: 1045682325}
   - component: {fileID: 1045682327}
   - component: {fileID: 1045682326}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1157,7 +1202,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 488946, guid: 312c52d27be2d2d42acea3ccebc4694b, type: 2}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2399054, guid: 312c52d27be2d2d42acea3ccebc4694b, type: 2}
       propertyPath: m_MinimumChartSize
@@ -1323,7 +1368,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1304999364
 GameObject:
@@ -1361,22 +1406,22 @@ MonoBehaviour:
   m_TankPrefab: {fileID: 1858309144510962, guid: 73d2cb82cf08b0d48bd272bfe1f76df8,
     type: 2}
   m_Tanks:
-  - m_PlayerColor: {r: 0.16470589, g: 0.39215687, b: 0.69803923, a: 0}
+  - m_PlayerNumber: 1
+    m_ColoredPlayerText: 
+    m_Instance: {fileID: 0}
+    m_Wins: 0
+    m_Laps: 0
+    m_PlayerColor: {r: 0.16470589, g: 0.39215687, b: 0.69803923, a: 0}
     m_SpawnPoint: {fileID: 194018016}
     m_LapDial: {fileID: 2117000071}
-    m_PlayerNumber: 1
+  - m_PlayerNumber: 2
     m_ColoredPlayerText: 
     m_Instance: {fileID: 0}
     m_Wins: 0
     m_Laps: 0
-  - m_PlayerColor: {r: 0.8980392, g: 0.18039216, b: 0.15686275, a: 0}
+    m_PlayerColor: {r: 0.8980392, g: 0.18039216, b: 0.15686275, a: 0}
     m_SpawnPoint: {fileID: 2083660209}
     m_LapDial: {fileID: 2061044005}
-    m_PlayerNumber: 2
-    m_ColoredPlayerText: 
-    m_Instance: {fileID: 0}
-    m_Wins: 0
-    m_Laps: 0
   m_Checkpoints:
   - {fileID: 1987648345}
   - {fileID: 1039455406}
@@ -1392,7 +1437,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &1304999367
 AudioSource:
@@ -1607,7 +1652,7 @@ GameObject:
   - component: {fileID: 1751804657}
   - component: {fileID: 1751804659}
   - component: {fileID: 1751804658}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1828,7 +1873,7 @@ GameObject:
   - component: {fileID: 1987648345}
   - component: {fileID: 1987648346}
   - component: {fileID: 1987648344}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Checkpoint
   m_TagString: Untagged
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
@@ -1846,7 +1891,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 897138e394cb9c042b58829ce008e412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IsStartPoint: 0
 --- !u!4 &1987648345
 Transform:
   m_ObjectHideFlags: 0
@@ -1885,7 +1929,7 @@ GameObject:
   - component: {fileID: 2013740321}
   - component: {fileID: 2013740323}
   - component: {fileID: 2013740322}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2105,7 +2149,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2117000069
 GameObject:
