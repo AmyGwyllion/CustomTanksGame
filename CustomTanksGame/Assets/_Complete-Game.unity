@@ -989,6 +989,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95ebd92f74257584f87bcc134f2dd94e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  P1_CameraRig: {fileID: 1771596988}
+  P2_CameraRig: {fileID: 2022093107}
   MaxPlayerDistance: 0
 --- !u!4 &761523293
 Transform:
@@ -1745,7 +1747,7 @@ GameObject:
   - component: {fileID: 1771596987}
   - component: {fileID: 1771596988}
   m_Layer: 11
-  m_Name: CameraControl_P1
+  m_Name: P1_CameraRig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2047,7 +2049,7 @@ GameObject:
   - component: {fileID: 2022093106}
   - component: {fileID: 2022093107}
   m_Layer: 0
-  m_Name: CameraControl_P2
+  m_Name: P2_CameraRig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

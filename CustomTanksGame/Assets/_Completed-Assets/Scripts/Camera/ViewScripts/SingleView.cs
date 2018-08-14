@@ -39,6 +39,9 @@ namespace Complete
             // Find the desired position.
             Vector3 target = calculateNewPosition();
 
+            // Check if we're not seeing some world bounds
+            checkForBounds(ref target);
+
             // Smoothly transition to that position.
             m_CameraControl.transform.position = Vector3.SmoothDamp(m_CameraControl.transform.position, target, ref m_MoveVelocity, DampTime);
         }

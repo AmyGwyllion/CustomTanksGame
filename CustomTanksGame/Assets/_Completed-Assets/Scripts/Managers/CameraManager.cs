@@ -2,10 +2,13 @@
 using UnityEngine;
 
  /**
-  * This script is used to controll al cameras in the scene
+  * This script is used to control al cameras in the scene
   */
 namespace Complete { 
     public class CameraManager : MonoBehaviour {
+
+        public CameraControl P1_CameraRig;                          // The player one camera
+        public CameraControl P2_CameraRig;                          // The player two camera
 
         public float MaxPlayerDistance;                             // The maximum distance the players can be before whe split the camera view
         private TankManager[] m_Players;                            // All player objects in scene,                                                 populated by GameManager at START()
@@ -25,7 +28,7 @@ namespace Complete {
 
         void Start ()
         {
-            //Get all camera childs
+            //Get all camera rig childs
             foreach (Transform child in transform) m_Cameras.Add(child.gameObject.GetComponent<CameraControl>());
         }
          
@@ -43,9 +46,9 @@ namespace Complete {
 
             }
 
-            for (int i = 0; i < m_Cameras.Count; i++) {
-                m_Cameras[i].SetStartPositionAndSize();
-            }
+            // Initialize the player one and player two cameras
+            P1_CameraRig.SetStartPositionAndSize();
+            P2_CameraRig.SetStartPositionAndSize();
         }
 
         // This function is called by the GameManager for populating the players array at his START() function
@@ -72,35 +75,48 @@ namespace Complete {
         //If their camera bounds are close merge view
         private void CheckP1P2Cameras()
         {
-            // Get the player one camera
-            Camera P1 = m_PlayerCamera[1].GetComponentInChildren<Camera>();
+            // We are using the main camera as the player one camera too
+            // Get the player one and player two cameras
+            Camera P1_Camera = P1_CameraRig.GetComponentInChildren<Camera>(true);
+            Camera P2_Camera = P2_CameraRig.GetComponentInChildren<Camera>(true);
+
+            // Get the player one and player two targets
+            Vector3 P1_Target = P1_CameraRig.GetTarget().position;
+            Vector3 P2_Target = P2_CameraRig.GetTarget().position;
 
             // Calculate the distance between player1 one and player2 
-            float dist = Vector3.Distance(m_PTransforms[0].position, m_PTransforms[1].position);
+            float dist = (P2_Target - P1_Target).magnitude;
 
             // Check if the player2 position is inside the player1 camera viewport
-            Vector3 coord = P1.WorldToViewportPoint(m_PTransforms[1].position);
+            Vector3 coord = P1_Camera.WorldToViewportPoint(P2_Target);
             if ((coord.x > 0.0f && coord.x < 1.0f || coord.y > 0.0f && coord.y < 1.0f) && dist<= MaxPlayerDistance)
             {
                 //If player2 is inside player1 field of view change to single view camera
-                if (m_PlayerCamera[1].IsViewSplit())
+                if (P1_CameraRig.IsViewSplit())
                 {
-                    m_PlayerCamera[1].ChangeToSingleView();
-                    m_PlayerCamera[2].ChangeToSingleView();
+                    P1_CameraRig.ChangeToSingleView();
+                    
+                    //Disable the second player camera
+                    P2_Camera.enabled = false;
                 }
             }
+
             //Else if distance is to high change to split view
             else if(dist> MaxPlayerDistance)
             {
-                if (!m_PlayerCamera[1].IsViewSplit())
+                if (!P1_CameraRig.IsViewSplit())
                 {
-                    m_PlayerCamera[1].ChangeToSplitView();
-                    m_PlayerCamera[2].ChangeToSplitView();
+                    P1_CameraRig.ChangeToSplitView();
+                    
+                    //Enable player two camera and set it tosplit view
+                    P2_Camera.enabled = true;
+                    P2_CameraRig.ChangeToSplitView();
                 }
             }
            
         }
 
+        // I leaved this methods here so the cameras have no need of getting all the other cameras info too
         // This method is used from ViewBehaviours scripts
         public Vector3 GetAveragePosition()
         {

@@ -5,6 +5,7 @@
  */
 namespace Complete
 {
+
     public abstract class ViewBehaviour
     {
         public enum E_VIEWCLASS {None, Single, Split};          // Enumerator for defining the different camera views inheritances
@@ -20,7 +21,7 @@ namespace Complete
         protected float m_ZoomSpeed;                            // Reference zoom speed for the smooth damping of the zoom
         protected float m_Size;                                 // The actual orthographic camera size
         protected float m_MaxSize;                              // The max camera size value
-        protected float m_MinSize;                              // The smallest orthographic size the camera can be.
+        public float m_MinSize;                              // The smallest orthographic size the camera can be.
 
         // The class constructor
         public ViewBehaviour(CameraControl cameraControl, Transform target) {
