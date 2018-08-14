@@ -20,8 +20,8 @@ namespace Complete
         {
             // Find the desired position.
             // Set the camera's position to the desired position without damping.
-            Vector3 target = m_CameraControl.GetComponentInParent<CameraManager>().GetAveragePosition() - m_Player.transform.position;
-            target /= 3.0f;
+
+            Vector3 target = calculateNewPosition();
             checkForBounds(ref target);
 
             m_CameraControl.transform.position = target;
@@ -39,13 +39,23 @@ namespace Complete
         public override void Move( float DampTime)
         {
             // Find the desired camera position
-            Vector3 pos = m_CameraControl.GetComponentInParent<CameraManager>().GetAveragePosition() - m_Player.transform.position;
-            Vector3 target = m_Player.position + pos/3;
-
+            Vector3 target = calculateNewPosition();
             checkForBounds(ref target);
             
             // Smoothly transition to that position.
             m_CameraControl.transform.position = Vector3.SmoothDamp(m_CameraControl.transform.position, target, ref m_MoveVelocity, DampTime); 
+        }
+
+        private Vector3 calculateNewPosition()
+        {
+            Vector3 average = m_CameraControl.GetComponentInParent<CameraManager>().GetAveragePosition();
+            Vector3 target = average - m_Player.transform.position;
+            float radius = 10.0f;
+            Vector3 dir = target/ target.magnitude;
+
+            target.x = m_Player.transform.position.x + dir.x * radius;
+            target.z = m_Player.transform.position.z + dir.z * radius;
+            return target;
         }
 
         public override void Zoom( float DampTime)

@@ -101,7 +101,7 @@ namespace Complete {
            
         }
 
-        // This method is used from external scripts
+        // This method is used from ViewBehaviours scripts
         public Vector3 GetAveragePosition()
         {
             Vector3 averagePos = new Vector3();
@@ -130,7 +130,7 @@ namespace Complete {
             return averagePos;
         }
 
-        // This method is used from external scripts
+        // This method is used from ViewBehaviours scripts
         public float GetRequiredSize(CameraControl targetCamera)
         {
             // Find the position the camera rig is moving towards in its local space.
