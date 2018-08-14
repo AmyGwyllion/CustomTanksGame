@@ -18,7 +18,9 @@ namespace Complete
 
         protected Vector3 m_MoveVelocity;                       // Reference velocity for the smooth damping of the position
         protected float m_ZoomSpeed;                            // Reference zoom speed for the smooth damping of the zoom
-
+        protected float m_Size;                                 // The actual orthographic camera size
+        protected float m_MaxSize;                              // The max camera size value
+        protected float m_MinSize;                              // The smallest orthographic size the camera can be.
 
         // The class constructor
         public ViewBehaviour(CameraControl cameraControl, Transform target) {
@@ -31,6 +33,9 @@ namespace Complete
 
             m_MoveVelocity = Vector3.zero;
             m_ZoomSpeed = 0.0f;
+            m_Size = 15.0f;
+            m_MaxSize = 15.0f;
+            m_MinSize = 6.5f;
 
             // Get the camera attatched to the camera control and his mask (if exist)
             m_Camera = cameraControl.GetComponentInChildren<Camera>();
@@ -63,42 +68,47 @@ namespace Complete
             if(target!=null) m_Player = target;
         }
 
-        //Check if there are any world bounds in that direction
-        protected void checkForBounds(ref Vector3 target)
+        //Check if there are any world bounds in that distance
+        protected Vector3 checkForBounds(ref Vector3 target)
         {
             // Get the mask the world collider is in
             int layerMask = LayerMask.GetMask("WorldRaycastBounds");
 
-            // Get the direction where going to
-            Vector3 direction = target - m_CameraControl.transform.position;
+            // Get the distance between the target and the actual camera rig position
+            Vector3 distance = target - m_CameraControl.transform.position;
 
             // If whe are reaching boundaries from the bottom left or the top right camera view corners
-            if (CheckBotLeft(layerMask, direction) || CheckTopRight(layerMask, direction))
+            if (CheckBotLeft(layerMask, distance) || CheckTopRight(layerMask, distance))
             {
-                // Flip te X direction for going perpendicular and add that direction to the final camera position
-                direction.x = -direction.x;
-                target.x += direction.x;
+                
+                // Flip te X distance for going perpendicular and add that distance to the final camera position
+                distance.x = -distance.x;
+                target.x += distance.x;
+
             }
 
             // If we are reaching boundaries from the top left or bottom right camera view corners
-            if (CheckTopLeft(layerMask, direction) || CheckBotRight(layerMask, direction))
+            if (CheckTopLeft(layerMask, distance) || CheckBotRight(layerMask, distance))
             {
-                // Flip the Z direction for going perpendicular and add that direction to the final camera position
-                direction.z = -direction.z;
-                target.z += direction.z;
+                // Flip the Z distance for going perpendicular and add that distance to the final camera position
+                distance.z = -distance.z;
+                target.z += distance.z;
+
             }
+
+            return target;
         }
 
         // The next functions do the same operations for each camera corner
-        private bool CheckBotLeft(int layer, Vector3 direction)
+        private bool CheckBotLeft(int layer, Vector3 distance)
         {
             // Calculate the camera corner point in the world coordinates
             Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(0, 0, m_Camera.nearClipPlane));
 
-            // Add it the direction we are trying to go
-            pos += direction;
+            // Add it the distance we are trying to go
+            pos += distance;
 
-            // Do a raycast from the camera tho that point, and if we're not hitting nothing means that we have a world boundary
+            // Do a raycast from the camera to that point, and if we're not hitting nothing means that we have a world boundary
             if (!Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layer))
                 return true;
 
@@ -106,11 +116,11 @@ namespace Complete
             return false;
         }
 
-        private bool CheckTopRight(int layer, Vector3 direction)
+        private bool CheckTopRight(int layer, Vector3 distance)
         {
             Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(1, 1, m_Camera.nearClipPlane));
 
-            pos += direction;
+            pos += distance;
 
             if (!Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layer))
                 return true;
@@ -118,11 +128,11 @@ namespace Complete
             return false;
         }
 
-        private bool CheckBotRight(int layer, Vector3 direction)
+        private bool CheckBotRight(int layer, Vector3 distance)
         {
             Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(1, 0, m_Camera.nearClipPlane));
 
-            pos += direction;
+            pos += distance;
 
             if (!Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layer))
                 return true;
@@ -130,40 +140,17 @@ namespace Complete
             return false;
         }
 
-        private bool CheckTopLeft(int layer, Vector3 direction)
+        private bool CheckTopLeft(int layer, Vector3 distance)
         {
             Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(0, 1, m_Camera.nearClipPlane));
 
-            pos += direction;
+            pos += distance;
 
             if (!Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layer))
                 return true;
 
             return false;
         }
-
-
-        /*
-        private void Move ()
-        {
-            // Find the average position of the targets.
-            m_AveragePosition = GetComponentInParent<CameraManager>().GetAveragePosition();
-
-            // Smoothly transition to that position.
-            //transform.position = Vector3.SmoothDamp(transform.position, m_AveragePosition, ref m_MoveVelocity, m_DampTime);
-
-            //Follow the player
-            Vector3 newPosition = new Vector3(m_Target.position.x, transform.position.y, m_Target.position.z);
-            transform.position = Vector3.SmoothDamp(transform.position, newPosition, ref m_MoveVelocity, m_DampTime);
-        }
-
-        private void Zoom ()
-        {
-            // Find the required size based on the desired position and smoothly transition to that size.
-            float requiredSize = GetComponentInParent<CameraManager>().GetRequiredSize(this);
-            m_Camera.orthographicSize = Mathf.SmoothDamp (m_Camera.orthographicSize, requiredSize, ref m_ZoomSpeed, m_DampTime);
-        }
-        */
 
     }
 }

@@ -7,16 +7,13 @@ namespace Complete
 {
     public class SplitView : ViewBehaviour
     {
-
-        private float m_Zoom = 15.0f;
-        private float m_Radius = 15.0f;
-
         // Class constructor
         public SplitView(CameraControl cameraControl, Transform target) : base(cameraControl, target)
         {
             m_Class = E_VIEWCLASS.Split;                            // The object class identifier
             m_CameraControl = cameraControl;                        // The CameraControl object attatched to it
             if (m_Mask != null) m_Mask.gameObject.SetActive(true);  // If the camera has a mask on it enable it
+
         }
 
         // We call this method for initializing the camera position without damping time
@@ -44,14 +41,14 @@ namespace Complete
             Vector3 target = calculateNewPosition();
             
             // Smoothly transition to that position.
-            m_CameraControl.transform.position = Vector3.SmoothDamp(m_CameraControl.transform.position, target, ref m_MoveVelocity, DampTime); 
+            m_CameraControl.transform.position = Vector3.SmoothDamp(m_CameraControl.transform.position, target, ref m_MoveVelocity, DampTime);
+            
         }
 
         public override void Zoom( float DampTime)
         {
-            // Find the required size based on the desired position and smoothly transition to that size.
-            //float requiredSize = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
-            m_Camera.orthographicSize = m_Zoom;
+
+            m_Camera.orthographicSize = Mathf.SmoothDamp(m_Camera.orthographicSize, m_Size, ref m_ZoomSpeed, DampTime);
         }
 
         private Vector3 calculateNewPosition()
@@ -68,13 +65,14 @@ namespace Complete
             // All players position average point
             Vector3 average = m_CameraControl.GetComponentInParent<CameraManager>().GetAveragePosition();
 
-            // The direction where the average point is from the player
+            // The distance ant the direction where the average point is from the player
             Vector3 target = average - m_Player.transform.position;
             Vector3 dir = target/target.magnitude;
 
-            // The new camera position without move the Y coordinate
-            target.x = m_Player.transform.position.x + dir.x * m_Radius;
-            target.z = m_Player.transform.position.z + dir.z * m_Radius;
+            // The new camera position will be the direction to the average point plus the radio (without moving the camera in Y axis)
+            // We're using the size of the camera as the radio
+            target.x = m_Player.transform.position.x + dir.x * m_Size;
+            target.z = m_Player.transform.position.z + dir.z * m_Size;
 
             // Check if we are not hitting some world bounds
             checkForBounds(ref target);
