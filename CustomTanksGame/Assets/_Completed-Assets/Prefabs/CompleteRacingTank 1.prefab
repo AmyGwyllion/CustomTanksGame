@@ -142,7 +142,7 @@ GameObject:
   - component: {fileID: 114519115599105674}
   - component: {fileID: 114182999547653332}
   m_Layer: 9
-  m_Name: CompleteRacingTank
+  m_Name: CompleteRacingTank 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
