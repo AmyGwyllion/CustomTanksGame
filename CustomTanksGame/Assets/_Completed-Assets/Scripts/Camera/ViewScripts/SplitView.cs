@@ -20,11 +20,14 @@ namespace Complete
         {
             // Find the desired position.
             // Set the camera's position to the desired position without damping.
-            Vector3 pos = m_CameraControl.GetComponentInParent<CameraManager>().GetAveragePosition() - m_Player.transform.position;
-            m_CameraControl.transform.position = pos / 3;
+            Vector3 target = m_CameraControl.GetComponentInParent<CameraManager>().GetAveragePosition() - m_Player.transform.position;
+            target /= 3.0f;
+            checkForBounds(ref target);
+
+            m_CameraControl.transform.position = target;
 
             // Find and set the required size of the camera.
-            //m_Camera.orthographicSize = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
+            m_Camera.orthographicSize = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
         }
 
         public override void Update (float DampTime)
@@ -38,12 +41,11 @@ namespace Complete
             // Find the desired camera position
             Vector3 pos = m_CameraControl.GetComponentInParent<CameraManager>().GetAveragePosition() - m_Player.transform.position;
             Vector3 target = m_Player.position + pos/3;
-            Vector3 dir = target - m_CameraControl.transform.position;
-            //Debug.Log(dir);
-            bool thereAreBounds = checkForBounds(dir);
+
+            checkForBounds(ref target);
+            
             // Smoothly transition to that position.
-            if (!thereAreBounds) m_CameraControl.transform.position = Vector3.SmoothDamp(m_CameraControl.transform.position, target, ref m_MoveVelocity, DampTime);
-            else Debug.Log("Bounds here");
+            m_CameraControl.transform.position = Vector3.SmoothDamp(m_CameraControl.transform.position, target, ref m_MoveVelocity, DampTime); 
         }
 
         public override void Zoom( float DampTime)

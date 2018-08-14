@@ -64,16 +64,29 @@ namespace Complete
         }
 
         //Check if there are any world bounds in that direction
-        protected bool checkForBounds(Vector3 direction)
+        protected void checkForBounds(ref Vector3 target)
         {
-            return /*CheckBotLeft(direction) || CheckBotRight(direction) ||*/ CheckTopLeft(direction);//||CheckTopRight(direction);
+            int layerMask = LayerMask.GetMask("WorldRaycastBounds");
+            Vector3 direction = target - m_CameraControl.transform.position;
+
+            if(CheckBotLeft(layerMask, direction) || CheckTopRight(layerMask, direction))
+            {
+                direction.x = -direction.x;
+                target.x += direction.x;
+            }
+
+            if (CheckTopLeft(layerMask, direction) || CheckBotRight(layerMask, direction))
+            {
+                direction.z = -direction.z;
+                target.z += direction.z;
+            }
+            
+            
         }
 
         // Si en la proxima posicion de la camara encontramos el borde del mundo
-        private bool CheckBotLeft(Vector3 direction)
+        private bool CheckBotLeft(int layer, Vector3 direction)
         {
-            int layerMask = LayerMask.GetMask("WorldRaycastBounds");
-
             //La coordenada de la esquina en el mundo
             Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(0, 0, m_Camera.nearClipPlane));
 
@@ -81,56 +94,15 @@ namespace Complete
             pos += direction;
 
             //Lanzamos un raycast desde esa posicion para ver si colisiona con algo
-            if (!Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layerMask))
+            if (!Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layer))
                 return true;
 
-            // If we hit the map bounds
             return false;
         }
 
         // Si en la proxima posicion de la camara encontramos el borde del mundo
-        private bool CheckBotRight(Vector3 direction)
+        private bool CheckTopRight(int layer, Vector3 direction)
         {
-            int layerMask = LayerMask.GetMask("WorldRaycastBounds");
-
-            //La coordenada de la esquina en el mundo
-            Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(1, 0, m_Camera.nearClipPlane));
-
-            // Le sumamos la direccion a la que se dirige
-            pos += direction;
-
-            //Lanzamos un raycast desde esa posicion para ver si colisiona con algo
-            if (!Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layerMask))
-                return true;
-
-            // If we hit the map bounds
-            return false;
-        }
-
-        // Si en la proxima posicion de la camara encontramos el borde del mundo
-        private bool CheckTopLeft(Vector3 direction)
-        {
-            int layerMask = LayerMask.GetMask("WorldRaycastBounds");
-
-            //La coordenada de la esquina en el mundo
-            Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(0, 1, m_Camera.nearClipPlane));
-
-            // Le sumamos la direccion a la que se dirige
-            pos += direction;
-
-            //Lanzamos un raycast desde esa posicion para ver si colisiona con algo
-            if (!Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layerMask))
-                return true;
-
-            // If we hit the map bounds
-            return false;
-        }
-
-        // Si en la proxima posicion de la camara encontramos el borde del mundo
-        private bool CheckTopRight(Vector3 direction)
-        {
-            int layerMask = LayerMask.GetMask("WorldRaycastBounds");
-
             //La coordenada de la esquina en el mundo
             Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(1, 1, m_Camera.nearClipPlane));
 
@@ -138,12 +110,44 @@ namespace Complete
             pos += direction;
 
             //Lanzamos un raycast desde esa posicion para ver si colisiona con algo
-            if (!Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layerMask))
+            if (!Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layer))
                 return true;
 
-            // If we hit the map bounds
             return false;
         }
+
+        // Si en la proxima posicion de la camara encontramos el borde del mundo
+        private bool CheckBotRight(int layer, Vector3 direction)
+        {
+            //La coordenada de la esquina en el mundo
+            Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(1, 0, m_Camera.nearClipPlane));
+
+            // Le sumamos la direccion a la que se dirige
+            pos += direction;
+
+            //Lanzamos un raycast desde esa posicion para ver si colisiona con algo
+            if (!Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layer))
+                return true;
+
+            return false;
+        }
+
+        // Si en la proxima posicion de la camara encontramos el borde del mundo
+        private bool CheckTopLeft(int layer, Vector3 direction)
+        {
+            //La coordenada de la esquina en el mundo
+            Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(0, 1, m_Camera.nearClipPlane));
+
+            // Le sumamos la direccion a la que se dirige
+            pos += direction;
+
+            //Lanzamos un raycast desde esa posicion para ver si colisiona con algo
+            if (!Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layer))
+                return true;
+
+            return false;
+        }
+
 
         /*
         private void Move ()
