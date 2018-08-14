@@ -110,7 +110,6 @@ namespace Complete {
                     
                     //Enable player two camera and set it tosplit view
                     P2_Camera.enabled = true;
-                    P2_CameraRig.SetStartPositionAndSize();
                     P2_CameraRig.ChangeToSplitView();
                 }
             }

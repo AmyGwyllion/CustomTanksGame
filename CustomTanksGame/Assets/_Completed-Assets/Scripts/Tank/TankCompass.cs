@@ -17,7 +17,7 @@ namespace Complete
         public Color m_FarColor = Color.gray;               // The arrow color
 
         private Transform[] m_Checkpoints;                  // All the checkpoints, set by TankManager
-        private int m_Next;                                 // Next checkpoint index to be reached
+        private ushort m_Next;                              // Next checkpoint index to be reached
 
         void Start()
         {
