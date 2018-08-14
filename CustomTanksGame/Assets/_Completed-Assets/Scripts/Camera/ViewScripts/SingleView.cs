@@ -49,9 +49,11 @@ namespace Complete
         public override void Zoom(float DampTime)
         {
             // Find the required size based on the desired position and smoothly transition to that size.
-            float requiredSize = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
+            m_Size = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
 
-            m_Camera.orthographicSize = Mathf.SmoothDamp(m_Camera.orthographicSize, requiredSize, ref m_ZoomSpeed, DampTime);
+            m_Size = Mathf.Clamp(m_Size, m_MinSize, m_MaxSize);
+
+            m_Camera.orthographicSize = Mathf.SmoothDamp(m_Camera.orthographicSize, m_Size, ref m_ZoomSpeed, DampTime);
         }
 
         private Vector3 calculateNewPosition()

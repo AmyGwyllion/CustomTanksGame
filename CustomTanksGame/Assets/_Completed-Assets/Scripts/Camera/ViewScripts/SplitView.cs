@@ -13,7 +13,6 @@ namespace Complete
             m_Class = E_VIEWCLASS.Split;                            // The object class identifier
             m_CameraControl = cameraControl;                        // The CameraControl object attatched to it
             if (m_Mask != null) m_Mask.gameObject.SetActive(true);  // If the camera has a mask on it enable it
-
         }
 
         // We call this method for initializing the camera position without damping time
@@ -47,6 +46,9 @@ namespace Complete
 
         public override void Zoom( float DampTime)
         {
+            m_Size = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
+
+            m_Size = Mathf.Clamp(m_Size, m_MinSize, m_MaxSize);
 
             m_Camera.orthographicSize = Mathf.SmoothDamp(m_Camera.orthographicSize, m_Size, ref m_ZoomSpeed, DampTime);
         }
