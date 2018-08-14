@@ -1,13 +1,13 @@
 fileFormatVersion: 2
-guid: ab943d3d5ac38bb448fabe3cdc9516d1
+guid: afb95068a0c57784a8155bbd6b20b57f
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Aim Arrow
+    21300000: CompassArrow_0
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -21,23 +21,23 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
-  isReadable: 0
+  isReadable: 1
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
   seamlessCubemap: 0
-  textureFormat: -1
+  textureFormat: 1
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
-    aniso: 16
+    filterMode: 1
+    aniso: 1
     mipBias: -100
     wrapU: 1
     wrapV: 1
-    wrapW: 1
+    wrapW: -1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -96,21 +96,21 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Aim Arrow
+      name: CompassArrow_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 256
         height: 256
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 127, y: 130, z: 125, w: 124}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f08630241986ecf4da9298bbe0d1ace3
+      spriteID: b1c3b0f28a5af9f48ab91ff46ab4f7e8
       vertices: []
       indices: 
       edges: []
@@ -118,7 +118,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 1fc3675ad46a3104bb4dad65cc3e600e
+    spriteID: c3787ea8039c4aa43ae25a5302b04777
     vertices: []
     indices: 
     edges: []

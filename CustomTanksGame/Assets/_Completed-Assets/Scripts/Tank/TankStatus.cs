@@ -13,8 +13,7 @@ namespace Complete
         
         public Slider m_Slider;                             // The slider to represent the player's quiet status time left
         public Image m_FillImage;                           // The image component of the slider
-        public Color m_QuietColor = Color.gray;            // The color the health bar will be when is quiet
-        public Color m_NotQuietColor = Color.green;        // The color the health bar will be when is not quiet
+        public Color m_PlayerColor;                         // The color of the player, set by TankEngine
 
         private bool m_IsQuiet;                             // Flag for knowing if the player is in a quiet state
         private float m_QuietTimeCount;                     // Timer for counting the seconds this player is going to be quiet
@@ -35,12 +34,16 @@ namespace Complete
 
             // Update the slider's value and color
             SetTankStatusUI();
+
+            m_FillImage.color = m_PlayerColor;
         }
 
         private void SetTankStatusUI()
         {
-            // Interpolate the color of the bar between the choosen colours based on the current percentage of the starting health.
-            m_FillImage.color = Color.Lerp (m_QuietColor , m_NotQuietColor, m_Slider.value / m_Slider.maxValue);
+            // Interpolate the color based on the percentage of time quiet
+            float alpha = Mathf.Lerp(0.0f, 1.0f, m_Slider.value / m_Slider.maxValue);
+            m_PlayerColor.a = alpha;
+            m_FillImage.color = m_PlayerColor;
         }
 
         public void StayQuiet(float time)
@@ -72,8 +75,12 @@ namespace Complete
 
                 // Update the slider value (per relative percentage)
                 m_Slider.value = m_Slider.maxValue - m_QuietTimeCount * (m_Slider.maxValue / m_TotalQuietTime);
-                m_FillImage.color = Color.Lerp(m_QuietColor, m_NotQuietColor, m_Slider.value / m_Slider.maxValue);
+
+                float alpha = Mathf.Lerp(0.0f, 1.0f, m_Slider.value / m_Slider.maxValue);
+                m_PlayerColor.a = alpha;
+                m_FillImage.color = m_PlayerColor;
             }
+
             // If the player is not quiet anymore
             else if(m_IsQuiet && m_QuietTimeCount <= 0)
             {

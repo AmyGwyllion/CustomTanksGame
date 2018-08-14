@@ -13,8 +13,7 @@ namespace Complete
 
         public Slider m_Slider;                             // The slider to represent how far is the player from the checkpoint
         public Image m_FillImage;                           // The arrow image component of the slider
-        public Color m_NearColor = Color.green;             // The arrow color
-        public Color m_FarColor = Color.gray;               // The arrow color
+        public Color m_PlayerColor;                         // The player color, set by TankEngine
 
         private Transform[] m_Checkpoints;                  // All the checkpoints, set by TankManager
         private ushort m_Next;                              // Next checkpoint index to be reached
@@ -39,11 +38,11 @@ namespace Complete
             // First get the direction vector
             Vector3 to = m_Checkpoints[m_Next].position;
             Vector3 from = m_Slider.transform.position;
-            Vector3 v = to - from;
-            v.Normalize();
+            Vector3 distance = to - from;
+            distance.Normalize();
 
             // Then get his arc tangent and pass from radians to angles
-            float m_Angle = (Mathf.Atan2(v.x, v.z) * Mathf.Rad2Deg);
+            float m_Angle = (Mathf.Atan2(distance.x, distance.z) * Mathf.Rad2Deg);
 
             // Get the slider actual rotation in angles
             Vector3 rot = m_Slider.transform.eulerAngles;
@@ -69,7 +68,7 @@ namespace Complete
             m_Slider.value = distance;
 
             //Change the arrow color
-            m_FillImage.color = Color.Lerp(m_NearColor, m_FarColor, distance/m_Slider.maxValue);
+            m_FillImage.color = Color.Lerp(m_PlayerColor, Color.gray, distance/m_Slider.maxValue);
         }
 
         // This function is triggered when a checkpoint collides with the player, triggered by Checkpoint script

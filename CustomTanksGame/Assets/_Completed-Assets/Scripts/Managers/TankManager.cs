@@ -47,6 +47,10 @@ namespace Complete
             m_Compass.m_PlayerNumber = m_PlayerNumber;
             m_TankStatus.m_PlayerNumber = m_PlayerNumber;
 
+            //Set the player colors for the UI
+            m_Compass.m_PlayerColor = m_PlayerColor;
+            m_TankStatus.m_PlayerColor = m_PlayerColor;
+            
             // Create a string using the correct color that says 'PLAYER 1' etc based on the tank's color and the player's number.
             m_ColoredPlayerText = "<color=#" + ColorUtility.ToHtmlStringRGB(m_PlayerColor) + ">PLAYER " + m_PlayerNumber + "</color>";
 
