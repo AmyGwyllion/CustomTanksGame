@@ -25,7 +25,11 @@ namespace Complete
             m_CameraControl.transform.position = target;
 
             // Find and set the required size of the camera.
-            m_Camera.orthographicSize = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
+            m_Size = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
+
+            m_Size = Mathf.Clamp(m_Size, m_MinSize, m_MaxSize);
+
+            m_Camera.orthographicSize = m_Size;
         }
 
         public override void Update(float DampTime)

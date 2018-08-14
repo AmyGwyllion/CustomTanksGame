@@ -34,8 +34,8 @@ namespace Complete
 
             m_MoveVelocity = Vector3.zero;
             m_ZoomSpeed = 0.0f;
-            m_Size = 15.0f;
-            m_MaxSize = 15.0f;
+            m_Size = 12.0f;
+            m_MaxSize = 12.0f;
             m_MinSize = 6.5f;
 
             // Get the camera attatched to the camera control and his mask (if exist)
