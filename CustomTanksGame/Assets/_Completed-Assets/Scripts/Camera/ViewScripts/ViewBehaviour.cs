@@ -66,82 +66,76 @@ namespace Complete
         //Check if there are any world bounds in that direction
         protected void checkForBounds(ref Vector3 target)
         {
+            // Get the mask the world collider is in
             int layerMask = LayerMask.GetMask("WorldRaycastBounds");
+
+            // Get the direction where going to
             Vector3 direction = target - m_CameraControl.transform.position;
 
-            if(CheckBotLeft(layerMask, direction) || CheckTopRight(layerMask, direction))
+            // If whe are reaching boundaries from the bottom left or the top right camera view corners
+            if (CheckBotLeft(layerMask, direction) || CheckTopRight(layerMask, direction))
             {
+                // Flip te X direction for going perpendicular and add that direction to the final camera position
                 direction.x = -direction.x;
                 target.x += direction.x;
             }
 
+            // If we are reaching boundaries from the top left or bottom right camera view corners
             if (CheckTopLeft(layerMask, direction) || CheckBotRight(layerMask, direction))
             {
+                // Flip the Z direction for going perpendicular and add that direction to the final camera position
                 direction.z = -direction.z;
                 target.z += direction.z;
             }
-            
-            
         }
 
-        // Si en la proxima posicion de la camara encontramos el borde del mundo
+        // The next functions do the same operations for each camera corner
         private bool CheckBotLeft(int layer, Vector3 direction)
         {
-            //La coordenada de la esquina en el mundo
+            // Calculate the camera corner point in the world coordinates
             Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(0, 0, m_Camera.nearClipPlane));
 
-            // Le sumamos la direccion a la que se dirige
+            // Add it the direction we are trying to go
             pos += direction;
 
-            //Lanzamos un raycast desde esa posicion para ver si colisiona con algo
+            // Do a raycast from the camera tho that point, and if we're not hitting nothing means that we have a world boundary
             if (!Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layer))
                 return true;
 
+            // Else we hitted the world boundary collider
             return false;
         }
 
-        // Si en la proxima posicion de la camara encontramos el borde del mundo
         private bool CheckTopRight(int layer, Vector3 direction)
         {
-            //La coordenada de la esquina en el mundo
             Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(1, 1, m_Camera.nearClipPlane));
 
-            // Le sumamos la direccion a la que se dirige
             pos += direction;
 
-            //Lanzamos un raycast desde esa posicion para ver si colisiona con algo
             if (!Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layer))
                 return true;
 
             return false;
         }
 
-        // Si en la proxima posicion de la camara encontramos el borde del mundo
         private bool CheckBotRight(int layer, Vector3 direction)
         {
-            //La coordenada de la esquina en el mundo
             Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(1, 0, m_Camera.nearClipPlane));
 
-            // Le sumamos la direccion a la que se dirige
             pos += direction;
 
-            //Lanzamos un raycast desde esa posicion para ver si colisiona con algo
             if (!Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layer))
                 return true;
 
             return false;
         }
 
-        // Si en la proxima posicion de la camara encontramos el borde del mundo
         private bool CheckTopLeft(int layer, Vector3 direction)
         {
-            //La coordenada de la esquina en el mundo
             Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(0, 1, m_Camera.nearClipPlane));
 
-            // Le sumamos la direccion a la que se dirige
             pos += direction;
 
-            //Lanzamos un raycast desde esa posicion para ver si colisiona con algo
             if (!Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layer))
                 return true;
 
