@@ -22,6 +22,7 @@ namespace Complete
         {
             // Reset the next checkpoint
             m_Next = 0;
+            m_PlayerColor.a = 1.0f;
         }
 
         public void FixedUpdate()
@@ -68,7 +69,7 @@ namespace Complete
             m_Slider.value = distance;
 
             //Change the arrow color
-            m_FillImage.color = Color.Lerp(m_PlayerColor, Color.gray, distance/m_Slider.maxValue);
+            m_FillImage.color = Color.Lerp(Color.white, m_PlayerColor, Mathf.PingPong(Time.time, 1));
         }
 
         // This function is triggered when a checkpoint collides with the player, triggered by Checkpoint script

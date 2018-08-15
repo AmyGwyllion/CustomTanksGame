@@ -1838,7 +1838,7 @@ MonoBehaviour:
   m_EndDelay: 3
   m_CameraManager: {fileID: 761523292}
   m_MessageText: {fileID: 102963701}
-  m_TankPrefab: {fileID: 1238873530562942, guid: b8aa6cc2ac9f13c4285badfb0e97e007,
+  m_TankPrefab: {fileID: 1904767648609154, guid: 402086cf01151c743b4ad08f1eed688c,
     type: 2}
   m_Tanks:
   - m_PlayerNumber: 1
@@ -2075,7 +2075,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 823
+    m_Bits: 9015
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
