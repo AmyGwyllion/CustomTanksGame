@@ -15,33 +15,6 @@ namespace Complete
             if (m_Mask != null) m_Mask.gameObject.SetActive(true);  // If the camera has a mask on it enable it
         }
 
-        // We call this method for initializing the camera position without damping time
-        public override void Initialize()
-        {
-            // Find the desired position.
-            Vector3 target = calculateNewPosition();
-
-            // Set the camera's position to the desired position without damping.
-            m_CameraControl.transform.position = target;
-
-            // Find and set the required size of the camera.
-            float newSize = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
-
-            if (!checkZoomBounds())
-            {
-
-                m_Size = Mathf.Clamp(newSize, m_MinSize, m_MaxSize);
-
-                m_Camera.orthographicSize = m_Size;
-            }
-        }
-
-        public override void Update (float DampTime)
-        {
-            //Use the base class update
-            base.Update(DampTime);
-        }
-
         public override void Move( float DampTime)
         {
             // Find the desired camera position
@@ -52,20 +25,7 @@ namespace Complete
             
         }
 
-        public override void Zoom(float DampTime)
-        {
-            float newSize = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
-
-            if (!checkZoomBounds())
-            {
-
-                m_Size = Mathf.Clamp(newSize, m_MinSize, m_MaxSize);
-
-                m_Camera.orthographicSize = Mathf.SmoothDamp(m_Camera.orthographicSize, m_Size, ref m_ZoomSpeed, DampTime);
-            }
-        }
-
-        private Vector3 calculateNewPosition()
+        protected override Vector3 calculateNewPosition()
         {
             /*
             * As long as whe are moving the centre of the camera we need to find a position between the player and 

@@ -16,12 +16,14 @@ namespace Complete
         public Color m_PlayerColor;                         // The player color, set by TankEngine
 
         private Transform[] m_Checkpoints;                  // All the checkpoints, set by TankManager
-        private ushort m_Next;                              // Next checkpoint index to be reached
+        private int m_Next;                                 // Next checkpoint index to be reached
+        private int m_ReachedPoints;                        // All checkpoints reached
 
-        void Start()
+        private void OnEnable()
         {
-            // Reset the next checkpoint
+            // Initialise data
             m_Next = 0;
+            m_ReachedPoints = 0;
             m_PlayerColor.a = 1.0f;
         }
 
@@ -87,17 +89,20 @@ namespace Complete
             return Color.clear;
         }
 
-        private void GetNextCheckpoint()
-        {
-            // If the next checkpoint index goes off the list...
-            if (m_Next + 1 >= m_Checkpoints.Length)
+        private void GetNextCheckpoint(){
+            // Increase the next iterator if is not bigger than the chechpoint array size
+            m_Next = m_Next+1 >= m_Checkpoints.Length ? 0 : m_Next+1 ;
+
+            //Add a reached point
+            m_ReachedPoints++;
+
+            // If we reached the same amount of checkpoints as the checkpoint array plus one...
+            if(m_ReachedPoints == m_Checkpoints.Length)
             {
                 // ...we've completed a lap! Tell GameManager to increase our lap dial and reset the next lap index
                 GameObject.FindWithTag("GameManager").GetComponent<GameManager>().AddLap(m_PlayerNumber);
-                m_Next = 0;
+                m_ReachedPoints = 0;
             }
-            // Else increment the next checkpoint index
-            else m_Next++;
         }
 
         // This function is used by the TankManager to set the checkpoint list, so we dont have to make the variable public

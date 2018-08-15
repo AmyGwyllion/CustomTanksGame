@@ -43,19 +43,43 @@ namespace Complete
             m_Mask = cameraControl.GetComponentInChildren<MaskControl>(true);
         }
 
+        // Virtual functions meant to be overrided by child classes
+        public virtual void Move(float DampTime) { Debug.Log("Reached ViewBehaviour Move()"); }     // Moves the camera to the target position
+        protected virtual Vector3 calculateNewPosition() { return Vector3.zero; }
+
         // Returns the class of the child class
         public E_VIEWCLASS GetClass()
         {
             return m_Class;
         }
 
-        // Virtual functions meant to be overrided by child classes
-        public virtual void Initialize() { Debug.Log("Reached ViewBehaviour Initialize"); }         // This method is used to initialize the camera without dumping movement
-        public virtual void Move(float DampTime) { Debug.Log("Reached ViewBehaviour Move()"); }     // Moves the camera to the target position
-        public virtual void Zoom(float DampTime) { Debug.Log("Reached ViewBehaviour Zoom()"); }     // Zooms the camera to fit the target
+        public void SetTarget(Transform target)
+        {
+            if(target!=null) m_Player = target;
+        }
+
+        // We call this method for initializing the camera position without damping time
+        public void Initialize()
+        {            
+            // Find the desired position.
+            Vector3 target = calculateNewPosition();
+
+            // Set the camera's position to the desired position without damping.
+            m_CameraControl.transform.position = target;
+
+            // Find and set the required size of the camera.
+            float newSize = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
+
+            if (!checkZoomBounds())
+            {
+                m_Size = Mathf.Clamp(newSize, m_MinSize, m_MaxSize);
+
+                m_Camera.orthographicSize = m_Size;
+            }
+        }
 
         // The base update, the functions are the same name but they will have different behaviours depending on the child class
-        public virtual void Update(float DampTime)
+        public void Update(float DampTime)
         {
             // Move the camera to the child class target
             Move(DampTime);
@@ -64,9 +88,17 @@ namespace Complete
             Zoom(DampTime);
         }
 
-        public void SetTarget(Transform target)
+        public void Zoom(float DampTime)
         {
-            if(target!=null) m_Player = target;
+            // Find the required size based on the desired position and smoothly transition to that size.
+            float newSize = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
+
+            if (!checkZoomBounds())
+            {
+                m_Size = Mathf.Clamp(newSize, m_MinSize, m_MaxSize);
+
+                m_Camera.orthographicSize = Mathf.SmoothDamp(m_Camera.orthographicSize, m_Size, ref m_ZoomSpeed, DampTime);
+            }
         }
 
         protected bool checkZoomBounds()
@@ -77,22 +109,18 @@ namespace Complete
             //BotLeft
             Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(0, 0, m_Camera.nearClipPlane));
             bool BotLeft = Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layerMask);
-            Debug.DrawRay(pos, m_Camera.transform.forward*1000, Color.red);
 
             //TopRight
             pos = m_Camera.ViewportToWorldPoint(new Vector3(1, 1, m_Camera.nearClipPlane));
             bool TopRight = Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layerMask);
-            Debug.DrawRay(pos, m_Camera.transform.forward * 1000, Color.red);
 
             //BotRight
             m_Camera.ViewportToWorldPoint(new Vector3(1, 0, m_Camera.nearClipPlane));
             bool BotRight = Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layerMask);
-            Debug.DrawRay(pos, m_Camera.transform.forward * 1000, Color.red);
 
             //TopLeft
             pos = m_Camera.ViewportToWorldPoint(new Vector3(0, 1, m_Camera.nearClipPlane));
             bool TopLeft = Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layerMask);
-            Debug.DrawRay(pos, m_Camera.transform.forward * 1000, Color.red);
 
             bool flag = BotLeft && TopRight && BotRight && TopLeft;
 
