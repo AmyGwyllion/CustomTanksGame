@@ -73,18 +73,18 @@ namespace Complete
         }
 
         // This function is triggered when a checkpoint collides with the player, triggered by Checkpoint script
-        public bool HitCheckpoint(Transform checkpoint)
+        public Color HitCheckpoint(Transform checkpoint)
         {
             // If the checkpoint is the correct
             if (m_Checkpoints[m_Next] == checkpoint)
             {
                 //Get the next checkpoint from the array
                 GetNextCheckpoint();
-                return true;
+                return m_PlayerColor;
             }
 
             // If the checkpoint is not the correct one
-            return false;
+            return Color.clear;
         }
 
         private void GetNextCheckpoint()

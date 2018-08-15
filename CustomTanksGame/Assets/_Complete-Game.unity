@@ -406,7 +406,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 203112876}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.01, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1987648345}
@@ -1050,7 +1050,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 642765415}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 30, y: 0.1, z: 0}
+  m_LocalPosition: {x: 30, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1020620636}
@@ -1068,6 +1068,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 897138e394cb9c042b58829ce008e412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteBlinkingTimer: 0
+  spriteBlinkingMiniDuration: 0.1
+  spriteBlinkingTotalTimer: 0
+  spriteBlinkingTotalDuration: 1
+  startBlinking: 0
 --- !u!136 &642765418
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1382,7 +1387,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1039455405}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -18, y: 0.1, z: 1.85}
+  m_LocalPosition: {x: -18, y: 0, z: 1.85}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 393163984}
@@ -1400,6 +1405,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 897138e394cb9c042b58829ce008e412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteBlinkingTimer: 0
+  spriteBlinkingMiniDuration: 0.1
+  spriteBlinkingTotalTimer: 0
+  spriteBlinkingTotalDuration: 1
+  startBlinking: 0
 --- !u!136 &1039455408
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1838,7 +1848,7 @@ MonoBehaviour:
   m_EndDelay: 3
   m_CameraManager: {fileID: 761523292}
   m_MessageText: {fileID: 102963701}
-  m_TankPrefab: {fileID: 1904767648609154, guid: 402086cf01151c743b4ad08f1eed688c,
+  m_TankPrefab: {fileID: 1151492299287392, guid: 3bba041a66102874d8230600a0be9da1,
     type: 2}
   m_Tanks:
   - m_PlayerNumber: 1
@@ -2454,6 +2464,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 897138e394cb9c042b58829ce008e412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteBlinkingTimer: 0
+  spriteBlinkingMiniDuration: 0.1
+  spriteBlinkingTotalTimer: 0
+  spriteBlinkingTotalDuration: 1
+  startBlinking: 0
 --- !u!4 &1987648345
 Transform:
   m_ObjectHideFlags: 0
@@ -2461,7 +2476,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1987648343}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.65, y: 0.1, z: -24.5}
+  m_LocalPosition: {x: 2.65, y: 0, z: -24.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1751804656}
@@ -2707,7 +2722,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2065615218}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.6, y: 0.1, z: 25}
+  m_LocalPosition: {x: 0.6, y: 0, z: 25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 597359501}
@@ -2725,6 +2740,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 897138e394cb9c042b58829ce008e412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteBlinkingTimer: 0
+  spriteBlinkingMiniDuration: 0.1
+  spriteBlinkingTotalTimer: 0
+  spriteBlinkingTotalDuration: 1
+  startBlinking: 0
 --- !u!136 &2065615221
 CapsuleCollider:
   m_ObjectHideFlags: 0
