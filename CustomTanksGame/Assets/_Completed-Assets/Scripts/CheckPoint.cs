@@ -4,9 +4,11 @@ using UnityEngine.UI;
 /**
  * This script is for triggering players when they hit a checkpoint
  */
-namespace Complete {
+namespace Complete
+{
 
-    public class Checkpoint : MonoBehaviour {
+    public class Checkpoint : MonoBehaviour
+    {
 
         public float m_BlinkCount = 0.0f;               // The blink iteration counter
         public float m_BlinkLenth = 0.1f;               // The time we want our canvas to blink
@@ -36,10 +38,10 @@ namespace Complete {
             if (player != null)
             {
                 // Notify the player that he stepped on you by showing his color
-                Color playerColor = player.HitCheckpoint(transform);   
+                Color playerColor = player.HitCheckpoint(transform);
 
                 // If the player has a color
-                if(playerColor != Color.clear)
+                if (playerColor != Color.clear)
                 {
                     // Start blinking and play a nice sound effect
                     m_StartBlinking = true;
