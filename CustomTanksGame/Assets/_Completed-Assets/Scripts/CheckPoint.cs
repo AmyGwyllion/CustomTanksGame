@@ -14,12 +14,16 @@ namespace Complete {
         public float spriteBlinkingTotalTimer = 0.0f;
         public float spriteBlinkingTotalDuration = 1.0f;
         public bool startBlinking = false;
+        public AudioSource m_Audio;         // Reference to the audio source used to play the shooting audio. NB: different to the movement audio source.
+        public AudioClip m_Checkpoint;
 
         private Image m_FillImage;
         private Canvas m_Canvas;
+        private bool m_playAudio;
 
         private void Awake()
         {
+            m_playAudio = true;
             m_Canvas = gameObject.GetComponentInChildren<Canvas>();
 
             m_FillImage = gameObject.GetComponentInChildren<Image>();
@@ -39,13 +43,14 @@ namespace Complete {
                 {
                     startBlinking = true;
                     m_FillImage.color = playerColor;
+                    m_Audio.Play();
                 }
             }
         }
 
         private void Update()
         {
-            if (startBlinking == true)
+            if (startBlinking)
             {
                 SpriteBlinkingEffect();
             }
