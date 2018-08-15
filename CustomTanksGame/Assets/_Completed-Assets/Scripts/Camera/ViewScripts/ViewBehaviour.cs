@@ -39,8 +39,8 @@ namespace Complete
         }
 
         // Virtual functions meant to be overrided by child classes
-        public virtual void Move(float DampTime) { Debug.Log("Reached ViewBehaviour Move()"); }     // Moves the camera to the target position
-        protected virtual Vector3 calculateNewPosition() { return Vector3.zero; }                   // Calculates the new position where to move
+        protected virtual void Move(float DampTime) { Debug.Log("Reached ViewBehaviour Move()"); }     // Moves the camera to the target position
+        protected virtual Vector3 CalculateNewPosition() { return Vector3.zero; }                   // Calculates the new position where to move
 
         // Returns the class of the child class
         public E_VIEWCLASS GetClass()
@@ -58,7 +58,7 @@ namespace Complete
         public void Initialize()
         {
             // Find the desired position.
-            Vector3 target = calculateNewPosition();
+            Vector3 target = CalculateNewPosition();
 
             // Set the camera's position to the desired position without damping.
             m_CameraControl.transform.position = target;
@@ -77,7 +77,7 @@ namespace Complete
         }
 
         //Check if there are any world bounds in that distance
-        protected void checkBounds(ref Vector3 target)
+        protected void CheckBounds(ref Vector3 target)
         {
 
             // Get the mask the world collider is in
@@ -131,7 +131,7 @@ namespace Complete
             if (!Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layer))
                 return true;
 
-            // Else we hitted the world boundary collider
+            // Else we hit the world boundary collider
             return false;
         }
 

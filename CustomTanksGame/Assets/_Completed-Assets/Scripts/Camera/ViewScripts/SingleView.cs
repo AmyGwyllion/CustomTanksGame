@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 /**
- * This class is used to thefine the single view camera behaviour
+ * This class is used to define the single view camera behaviour (almost the same as the original Tanks game)
  */
 namespace Complete
 {
@@ -15,22 +15,22 @@ namespace Complete
             if (m_Mask != null) m_Mask.gameObject.SetActive(false);     // If the object attatched has a mask disable it
         }
 
-        public override void Move( float DampTime )
+        protected override void Move( float DampTime )
         {
             // Find the desired position.
-            Vector3 target = calculateNewPosition();
+            Vector3 target = CalculateNewPosition();
 
             // Smoothly transition to that position.
             m_CameraControl.transform.position = Vector3.SmoothDamp(m_CameraControl.transform.position, target, ref m_MoveVelocity, DampTime);
         }
 
-        protected override Vector3 calculateNewPosition()
+        protected override Vector3 CalculateNewPosition()
         {
             // Find the average position of the targets.
             Vector3 target = m_CameraControl.GetComponentInParent<CameraManager>().GetAveragePosition();
 
             // Check if we're not seeing some world bounds
-            checkBounds(ref target);
+            CheckBounds(ref target);
 
             return target;
         }

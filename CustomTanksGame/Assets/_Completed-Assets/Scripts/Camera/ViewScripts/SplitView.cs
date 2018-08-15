@@ -15,22 +15,22 @@ namespace Complete
             if (m_Mask != null) m_Mask.gameObject.SetActive(true);  // If the camera has a mask on it enable it
         }
 
-        public override void Move( float DampTime)
+        protected override void Move( float DampTime)
         {
             // Find the desired camera position
-            Vector3 target = calculateNewPosition();
+            Vector3 target = CalculateNewPosition();
             
             // Smoothly transition to that position.
             m_CameraControl.transform.position = Vector3.SmoothDamp(m_CameraControl.transform.position, target, ref m_MoveVelocity, DampTime);
         }
 
-        protected override Vector3 calculateNewPosition()
+        protected override Vector3 CalculateNewPosition()
         {
             /*
             * As long as whe are moving the centre of the camera we need to find a position between the player and 
             * the all players position average point to not lose track of the player
             * 
-            * So we have a imaginary circunference around the player with radius m_Radius
+            * So we have a imaginary circunference around the player with a radius
             * And the direction vector from the player to the average position
             * The new camera point will be the intersection between the direction vector and the player's circunference
             */
@@ -50,7 +50,7 @@ namespace Complete
 
             // Check if we are not hitting some world bounds
 
-            checkBounds(ref target);
+            CheckBounds(ref target);
 
             return target;
         }

@@ -19,7 +19,8 @@ namespace Complete
             m_Camera = gameObject.GetComponentInParent<Camera>();
         }
 
-        private void FixedUpdate() {
+        // We want to update the mask after the players update
+        private void LateUpdate() {
             //This function resizes the plane to fit the camera view
             Resize();
 

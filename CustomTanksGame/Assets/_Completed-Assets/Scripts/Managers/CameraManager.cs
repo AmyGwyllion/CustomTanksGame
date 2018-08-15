@@ -91,11 +91,11 @@ namespace Complete {
                 //If player2 is inside player1 field of view change to single view camera
                 if (P1_CameraRig.IsViewSplit())
                 {
-                    P1_CameraRig.ChangeToSingleView();
-
                     //Disable the second player camera
                     P2_Camera.enabled = false;
-                    //P2_CameraRig.ChangeToSingleView();
+
+                    P1_CameraRig.ChangeToSingleView();
+
                 }
             }
 
@@ -104,17 +104,17 @@ namespace Complete {
             {
                 if (!P1_CameraRig.IsViewSplit())
                 {
-                    P1_CameraRig.ChangeToSplitView();
-                    
-                    //Enable player two camera and set it tosplit view
-                    //P2_CameraRig.ChangeToSplitView();
+                    //Enable player two camera and set it tos plit view
                     P2_Camera.enabled = true;
+                    
+                    P1_CameraRig.ChangeToSplitView();
+                    P2_CameraRig.ChangeToSplitView();
                 }
             }
            
         }
 
-        // I leaved this methods here so the cameras have no need of getting all the other cameras info too
+        // I left this method here so the cameras have no need of getting all the other cameras info too
         // This method is used from ViewBehaviours scripts
         public Vector3 GetAveragePosition()
         {

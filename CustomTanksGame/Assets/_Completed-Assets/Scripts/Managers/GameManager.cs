@@ -10,7 +10,6 @@ namespace Complete
 
         public int m_LapsToWin = 3;                             // The number of laps for winning the round.
         public float m_StartDelay = 3f;                         // The delay between the start of RoundStarting and RoundPlaying phases.
-        public float m_EndDelay = 3f;                           // The delay between the end of RoundPlaying and RoundEnding phases.
         public CameraManager m_CameraManager;                   // Reference to the CameraControl script for control during different phases.
         public Text m_MessageText;                              // Reference to the overlay Text to display winning text, etc.
         public GameObject m_TankPrefab;                         // Reference to the prefab the players will control.
@@ -28,7 +27,7 @@ namespace Complete
 
         private void Awake()
         {
-            // Set a tag for this game object for enabling other scripts to acces some functions
+            // Set a tag for this game object for enabling other scripts to access some functions
             gameObject.tag = "GameManager";
         }
 

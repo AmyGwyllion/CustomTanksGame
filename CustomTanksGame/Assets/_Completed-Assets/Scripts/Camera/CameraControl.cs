@@ -15,7 +15,7 @@ namespace Complete
         private void Awake()
         {
             // Initialize our first game view
-            m_Behaviour = new SplitView(this, m_Target);
+            m_Behaviour = new SingleView(this, m_Target);
         }
 
         public void SetStartPositionAndSize()

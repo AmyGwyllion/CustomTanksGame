@@ -59,7 +59,7 @@ namespace Complete
 
         private void Blink()
         {
-            // Add time to the counter adn if we passed the total blink duration reset the variables and enable the canvas
+            // Add time to the counter and if we passed the total blink duration reset the variables and enable the canvas
             m_BlinkCounter += Time.deltaTime;
             if (m_BlinkCounter >= m_BlinkTotalDuration)
             {
