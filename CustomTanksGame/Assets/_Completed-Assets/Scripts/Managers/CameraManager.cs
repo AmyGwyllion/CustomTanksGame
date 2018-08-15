@@ -21,7 +21,7 @@ namespace Complete {
             m_Players = new TankManager[0];
             m_PTransforms = new Transform[0];
             m_Cameras = new List<CameraControl>();
-            MaxPlayerDistance = 20.0f;
+            MaxPlayerDistance = 22.0f;
         }
 
         void Start ()
@@ -92,9 +92,10 @@ namespace Complete {
                 if (P1_CameraRig.IsViewSplit())
                 {
                     P1_CameraRig.ChangeToSingleView();
-                    
+
                     //Disable the second player camera
                     P2_Camera.enabled = false;
+                    //P2_CameraRig.ChangeToSingleView();
                 }
             }
 
@@ -106,8 +107,8 @@ namespace Complete {
                     P1_CameraRig.ChangeToSplitView();
                     
                     //Enable player two camera and set it tosplit view
+                    //P2_CameraRig.ChangeToSplitView();
                     P2_Camera.enabled = true;
-                    P2_CameraRig.ChangeToSplitView();
                 }
             }
            
@@ -141,41 +142,6 @@ namespace Complete {
 
             // The desired position is the average position;
             return averagePos;
-        }
-
-        // This method is used from ViewBehaviours scripts
-        public float GetRequiredSize(CameraControl targetCamera)
-        {
-            // Find the position the camera rig is moving towards in its local space.
-            Vector3 desiredLocalPos = targetCamera.transform.InverseTransformPoint(GetAveragePosition());
-
-            // Start the camera's size calculation at zero.
-            float size = 0f;
-
-            // Go through all the targets...
-            for (int i = 0; i < m_PTransforms.Length; i++)
-            {
-                // ... and if they aren't active continue on to the next target.
-                if (!m_PTransforms[i].gameObject.activeSelf)
-                    continue;
-
-                // Otherwise, find the position of the target in the camera's local space.
-                Vector3 targetLocalPos = targetCamera.transform.InverseTransformPoint(m_PTransforms[i].position);
-
-                // Find the position of the target from the desired position of the camera's local space.
-                Vector3 desiredPosToTarget = targetLocalPos - desiredLocalPos;
-
-                // Choose the largest out of the current size and the distance of the tank 'up' or 'down' from the camera.
-                size = Mathf.Max(size, Mathf.Abs(desiredPosToTarget.y));
-
-                // Choose the largest out of the current size and the calculated size based on the tank being to the left or right of the camera.
-                size = Mathf.Max(size, Mathf.Abs(desiredPosToTarget.x) / targetCamera.GetComponentInChildren<Camera>().aspect);
-            }
-
-            // Add the edge buffer to the size.
-            size += targetCamera.m_ScreenEdgeBuffer;
-
-            return size;
         }
 
     }

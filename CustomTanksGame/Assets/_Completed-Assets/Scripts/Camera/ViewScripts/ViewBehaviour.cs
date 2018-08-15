@@ -18,10 +18,7 @@ namespace Complete
         protected Transform m_Player;                           // The attatched player transform
 
         protected Vector3 m_MoveVelocity;                       // Reference velocity for the smooth damping of the position
-        protected float m_ZoomSpeed;                            // Reference zoom speed for the smooth damping of the zoom
-        protected float m_Size;                                 // The actual orthographic camera size
-        protected float m_MaxSize;                              // The max camera size value
-        protected float m_MinSize;                              // The smallest orthographic size the camera can be.
+        protected float m_Size;                                 // The orthographic camera size
 
         // The class constructor
         public ViewBehaviour(CameraControl cameraControl, Transform target) {
@@ -33,14 +30,12 @@ namespace Complete
             m_Player = target;
 
             m_MoveVelocity = Vector3.zero;
-            m_ZoomSpeed = 0.0f;
             m_Size = 12.0f;
-            m_MaxSize = 12.0f;
-            m_MinSize = 6.5f;
 
             // Get the camera attatched to the camera control and his mask even if they aren't enabled
             m_Camera = cameraControl.GetComponentInChildren<Camera>(true);
             m_Mask = cameraControl.GetComponentInChildren<MaskControl>(true);
+
         }
 
         // Virtual functions meant to be overrided by child classes
@@ -61,7 +56,7 @@ namespace Complete
 
         // We call this method for initializing the camera position without damping time
         public void Initialize()
-        {            
+        {
             // Find the desired position.
             Vector3 target = calculateNewPosition();
 
@@ -69,10 +64,6 @@ namespace Complete
             m_CameraControl.transform.position = target;
 
             // Find and set the required size of the camera without damping.
-            m_Size = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
-
-            m_Size = Mathf.Clamp(m_Size, m_MinSize, m_MaxSize);
-
             m_Camera.orthographicSize = m_Size;
         }
 
@@ -83,26 +74,12 @@ namespace Complete
             // Move the camera to the target
             Move(DampTime);
 
-            // Fit the camera view to the target
-            Zoom(DampTime);
-
-        }
-
-        public void Zoom(float DampTime)
-        {
-            // Find the required size based on the desired position and smoothly transition to that size.
-            m_Size = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
-
-            // Clamp the new position between the limits
-            m_Size = Mathf.Clamp(m_Size, m_MinSize, m_MaxSize);
-
-            m_Camera.orthographicSize = Mathf.SmoothDamp(m_Camera.orthographicSize, m_Size, ref m_ZoomSpeed, DampTime);
-            
         }
 
         //Check if there are any world bounds in that distance
         protected void checkBounds(ref Vector3 target)
         {
+
             // Get the mask the world collider is in
             int layerMask = LayerMask.GetMask("WorldRaycastBounds");
 
@@ -136,7 +113,9 @@ namespace Complete
             {
                 // Flip the Z axis
                 target.z = -target.z;
+                
             }
+
         }
 
         // The next functions do the same operations for each camera corner

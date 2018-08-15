@@ -22,7 +22,6 @@ namespace Complete
             
             // Smoothly transition to that position.
             m_CameraControl.transform.position = Vector3.SmoothDamp(m_CameraControl.transform.position, target, ref m_MoveVelocity, DampTime);
-            
         }
 
         protected override Vector3 calculateNewPosition()
@@ -36,12 +35,13 @@ namespace Complete
             * The new camera point will be the intersection between the direction vector and the player's circunference
             */
 
+
             // All players position average point
             Vector3 average = m_CameraControl.GetComponentInParent<CameraManager>().GetAveragePosition();
 
             // The distance ant the direction where the average point is from the player
             Vector3 target = average - m_Player.transform.position;
-            Vector3 dir = target/target.magnitude;
+            Vector3 dir = target / target.magnitude;
 
             // The new camera position will be the direction to the average point plus the radio (without moving the camera in Y axis)
             // We're using the size of the camera as the radio
@@ -49,6 +49,7 @@ namespace Complete
             target.z = m_Player.transform.position.z + dir.z * m_Size;
 
             // Check if we are not hitting some world bounds
+
             checkBounds(ref target);
 
             return target;
