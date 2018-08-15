@@ -68,14 +68,11 @@ namespace Complete
             m_CameraControl.transform.position = target;
 
             // Find and set the required size of the camera.
-            float newSize = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
+            m_Size = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
 
-            if (!checkZoomBounds())
-            {
-                m_Size = Mathf.Clamp(newSize, m_MinSize, m_MaxSize);
+            m_Size = Mathf.Clamp(m_Size, m_MinSize, m_MaxSize);
 
-                m_Camera.orthographicSize = m_Size;
-            }
+            m_Camera.orthographicSize = m_Size;
         }
 
         // The base update, the functions are the same name but they will have different behaviours depending on the child class
@@ -93,12 +90,10 @@ namespace Complete
             // Find the required size based on the desired position and smoothly transition to that size.
             float newSize = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
 
-            if (!checkZoomBounds())
-            {
-                m_Size = Mathf.Clamp(newSize, m_MinSize, m_MaxSize);
+            m_Size = Mathf.Clamp(newSize, m_MinSize, m_MaxSize);
 
-                m_Camera.orthographicSize = Mathf.SmoothDamp(m_Camera.orthographicSize, m_Size, ref m_ZoomSpeed, DampTime);
-            }
+            m_Camera.orthographicSize = Mathf.SmoothDamp(m_Camera.orthographicSize, m_Size, ref m_ZoomSpeed, DampTime);
+            
         }
 
         protected bool checkZoomBounds()
