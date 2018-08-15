@@ -25,11 +25,15 @@ namespace Complete
             m_CameraControl.transform.position = target;
 
             // Find and set the required size of the camera.
-            m_Size = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
+            float newSize = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
 
-            m_Size = Mathf.Clamp(m_Size, m_MinSize, m_MaxSize);
+            if (!checkZoomBounds())
+            {
 
-            m_Camera.orthographicSize = m_Size;
+                m_Size = Mathf.Clamp(newSize, m_MinSize, m_MaxSize);
+
+                m_Camera.orthographicSize = m_Size;
+            }
         }
 
         public override void Update (float DampTime)
@@ -48,13 +52,17 @@ namespace Complete
             
         }
 
-        public override void Zoom( float DampTime)
+        public override void Zoom(float DampTime)
         {
-            m_Size = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
+            float newSize = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
 
-            m_Size = Mathf.Clamp(m_Size, m_MinSize, m_MaxSize);
+            if (!checkZoomBounds())
+            {
 
-            m_Camera.orthographicSize = Mathf.SmoothDamp(m_Camera.orthographicSize, m_Size, ref m_ZoomSpeed, DampTime);
+                m_Size = Mathf.Clamp(newSize, m_MinSize, m_MaxSize);
+
+                m_Camera.orthographicSize = Mathf.SmoothDamp(m_Camera.orthographicSize, m_Size, ref m_ZoomSpeed, DampTime);
+            }
         }
 
         private Vector3 calculateNewPosition()

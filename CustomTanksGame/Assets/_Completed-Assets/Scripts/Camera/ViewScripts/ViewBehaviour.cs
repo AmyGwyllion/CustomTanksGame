@@ -69,6 +69,36 @@ namespace Complete
             if(target!=null) m_Player = target;
         }
 
+        protected bool checkZoomBounds()
+        {
+            //If the actual view has a corner outside the world bounds
+            int layerMask = LayerMask.GetMask("WorldRaycastBounds");
+
+            //BotLeft
+            Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(0, 0, m_Camera.nearClipPlane));
+            bool BotLeft = Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layerMask);
+            Debug.DrawRay(pos, m_Camera.transform.forward*1000, Color.red);
+
+            //TopRight
+            pos = m_Camera.ViewportToWorldPoint(new Vector3(1, 1, m_Camera.nearClipPlane));
+            bool TopRight = Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layerMask);
+            Debug.DrawRay(pos, m_Camera.transform.forward * 1000, Color.red);
+
+            //BotRight
+            m_Camera.ViewportToWorldPoint(new Vector3(1, 0, m_Camera.nearClipPlane));
+            bool BotRight = Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layerMask);
+            Debug.DrawRay(pos, m_Camera.transform.forward * 1000, Color.red);
+
+            //TopLeft
+            pos = m_Camera.ViewportToWorldPoint(new Vector3(0, 1, m_Camera.nearClipPlane));
+            bool TopLeft = Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layerMask);
+            Debug.DrawRay(pos, m_Camera.transform.forward * 1000, Color.red);
+
+            bool flag = BotLeft && TopRight && BotRight && TopLeft;
+
+            return !flag;
+        }
+
         //Check if there are any world bounds in that distance
         protected Vector3 checkForBounds(ref Vector3 target)
         {
