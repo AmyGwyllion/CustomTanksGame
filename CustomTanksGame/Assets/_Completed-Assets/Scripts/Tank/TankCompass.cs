@@ -69,7 +69,7 @@ namespace Complete
             m_Slider.value = distance;
 
             //Change the arrow color
-            m_FillImage.color = Color.Lerp(Color.white, m_PlayerColor, Mathf.PingPong(Time.time, 1));
+            m_FillImage.color = Color.Lerp(Color.white, m_PlayerColor, Mathf.PingPong(Time.time, 1.0f));
         }
 
         // This function is triggered when a checkpoint collides with the player, triggered by Checkpoint script
