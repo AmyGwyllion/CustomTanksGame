@@ -49,7 +49,7 @@ namespace Complete
             target.z = m_Player.transform.position.z + dir.z * m_Size;
 
             // Check if we are not hitting some world bounds
-            checkForBounds(ref target);
+            checkBounds(ref target);
 
             return target;
         }

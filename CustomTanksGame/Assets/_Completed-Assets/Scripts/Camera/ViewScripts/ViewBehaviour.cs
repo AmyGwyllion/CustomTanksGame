@@ -38,14 +38,14 @@ namespace Complete
             m_MaxSize = 12.0f;
             m_MinSize = 6.5f;
 
-            // Get the camera attatched to the camera control and his mask (if exist)
-            m_Camera = cameraControl.GetComponentInChildren<Camera>();
+            // Get the camera attatched to the camera control and his mask even if they aren't enabled
+            m_Camera = cameraControl.GetComponentInChildren<Camera>(true);
             m_Mask = cameraControl.GetComponentInChildren<MaskControl>(true);
         }
 
         // Virtual functions meant to be overrided by child classes
         public virtual void Move(float DampTime) { Debug.Log("Reached ViewBehaviour Move()"); }     // Moves the camera to the target position
-        protected virtual Vector3 calculateNewPosition() { return Vector3.zero; }
+        protected virtual Vector3 calculateNewPosition() { return Vector3.zero; }                   // Calculates the new position where to move
 
         // Returns the class of the child class
         public E_VIEWCLASS GetClass()
@@ -53,6 +53,7 @@ namespace Complete
             return m_Class;
         }
 
+        // Sets the camera target
         public void SetTarget(Transform target)
         {
             if(target!=null) m_Player = target;
@@ -67,7 +68,7 @@ namespace Complete
             // Set the camera's position to the desired position without damping.
             m_CameraControl.transform.position = target;
 
-            // Find and set the required size of the camera.
+            // Find and set the required size of the camera without damping.
             m_Size = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
 
             m_Size = Mathf.Clamp(m_Size, m_MinSize, m_MaxSize);
@@ -78,52 +79,29 @@ namespace Complete
         // The base update, the functions are the same name but they will have different behaviours depending on the child class
         public void Update(float DampTime)
         {
-            // Move the camera to the child class target
+
+            // Move the camera to the target
             Move(DampTime);
 
-            // Fit the camera to the child class target
+            // Fit the camera view to the target
             Zoom(DampTime);
+
         }
 
         public void Zoom(float DampTime)
         {
             // Find the required size based on the desired position and smoothly transition to that size.
-            float newSize = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
+            m_Size = m_CameraControl.GetComponentInParent<CameraManager>().GetRequiredSize(m_CameraControl);
 
-            m_Size = Mathf.Clamp(newSize, m_MinSize, m_MaxSize);
+            // Clamp the new position between the limits
+            m_Size = Mathf.Clamp(m_Size, m_MinSize, m_MaxSize);
 
             m_Camera.orthographicSize = Mathf.SmoothDamp(m_Camera.orthographicSize, m_Size, ref m_ZoomSpeed, DampTime);
             
         }
 
-        protected bool checkZoomBounds()
-        {
-            //If the actual view has a corner outside the world bounds
-            int layerMask = LayerMask.GetMask("WorldRaycastBounds");
-
-            //BotLeft
-            Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(0, 0, m_Camera.nearClipPlane));
-            bool BotLeft = Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layerMask);
-
-            //TopRight
-            pos = m_Camera.ViewportToWorldPoint(new Vector3(1, 1, m_Camera.nearClipPlane));
-            bool TopRight = Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layerMask);
-
-            //BotRight
-            m_Camera.ViewportToWorldPoint(new Vector3(1, 0, m_Camera.nearClipPlane));
-            bool BotRight = Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layerMask);
-
-            //TopLeft
-            pos = m_Camera.ViewportToWorldPoint(new Vector3(0, 1, m_Camera.nearClipPlane));
-            bool TopLeft = Physics.Raycast(pos, m_Camera.transform.forward, float.PositiveInfinity, layerMask);
-
-            bool flag = BotLeft && TopRight && BotRight && TopLeft;
-
-            return !flag;
-        }
-
         //Check if there are any world bounds in that distance
-        protected Vector3 checkForBounds(ref Vector3 target)
+        protected void checkBounds(ref Vector3 target)
         {
             // Get the mask the world collider is in
             int layerMask = LayerMask.GetMask("WorldRaycastBounds");
@@ -134,23 +112,31 @@ namespace Complete
             // If whe are reaching boundaries from the bottom left or the top right camera view corners
             if (CheckBotLeft(layerMask, distance) || CheckTopRight(layerMask, distance))
             {
-                
-                // Flip te X distance for going perpendicular and add that distance to the final camera position
+                // Flip te X axis for going perpendicular and add that distance to the final camera position
                 distance.x = -distance.x;
                 target.x += distance.x;
-
             }
 
             // If we are reaching boundaries from the top left or bottom right camera view corners
             if (CheckTopLeft(layerMask, distance) || CheckBotRight(layerMask, distance))
             {
-                // Flip the Z distance for going perpendicular and add that distance to the final camera position
+                // Flip the Z axis for going perpendicular and add that distance to the final camera position
                 distance.z = -distance.z;
                 target.z += distance.z;
-
             }
 
-            return target;
+            //Else if we are actually hitting a bound
+            if (CheckBotLeft(layerMask, Vector3.zero) || CheckTopRight(layerMask, Vector3.zero))
+            {
+                // Flip te X axis
+                target.x = -target.x;
+            }
+
+            if (CheckTopLeft(layerMask, Vector3.zero) || CheckBotRight(layerMask, Vector3.zero))
+            {
+                // Flip the Z axis
+                target.z = -target.z;
+            }
         }
 
         // The next functions do the same operations for each camera corner
