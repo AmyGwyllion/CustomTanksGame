@@ -6,24 +6,22 @@ using UnityEngine.UI;
  */
 namespace Complete {
 
-
     public class Checkpoint : MonoBehaviour {
 
-        public float spriteBlinkingTimer = 0.0f;
-        public float spriteBlinkingMiniDuration = 0.1f;
-        public float spriteBlinkingTotalTimer = 0.0f;
-        public float spriteBlinkingTotalDuration = 1.0f;
-        public bool startBlinking = false;
-        public AudioSource m_Audio;         // Reference to the audio source used to play the shooting audio. NB: different to the movement audio source.
-        public AudioClip m_Checkpoint;
+        public float m_BlinkCount = 0.0f;               // The blink iteration counter
+        public float m_BlinkLenth = 0.1f;               // The time we want our canvas to blink
+        public float m_BlinkCounter = 0.0f;             // The total time blinking counter
+        public float m_BlinkTotalDuration = 1.0f;       // The duration of the blink effect   
+        public bool m_StartBlinking = false;            // A flag for triggering the blink effect
+        public AudioSource m_Audio;                     // Reference to the audio source used to play the checkpoint audio
+        public AudioClip m_Checkpoint;                  // The checkpoint audio cllip
 
-        private Image m_FillImage;
-        private Canvas m_Canvas;
-        private bool m_playAudio;
+        private Canvas m_Canvas;                        // The canvas object for making the blink effect enabling/disabling it
+        private Image m_FillImage;                      // The checkpoint image
 
+        // Initialize the variables
         private void Awake()
         {
-            m_playAudio = true;
             m_Canvas = gameObject.GetComponentInChildren<Canvas>();
 
             m_FillImage = gameObject.GetComponentInChildren<Image>();
@@ -37,11 +35,14 @@ namespace Complete {
             TankCompass player = collider.GetComponentInParent<TankCompass>();
             if (player != null)
             {
-                Color playerColor = player.HitCheckpoint(transform);    // Notify the player that he stepped on you (how rude...)
+                // Notify the player that he stepped on you by showing his color
+                Color playerColor = player.HitCheckpoint(transform);   
 
+                // If the player has a color
                 if(playerColor != Color.clear)
                 {
-                    startBlinking = true;
+                    // Start blinking and play a nice sound effect
+                    m_StartBlinking = true;
                     m_FillImage.color = playerColor;
                     m_Audio.Play();
                 }
@@ -50,31 +51,30 @@ namespace Complete {
 
         private void Update()
         {
-            if (startBlinking)
-            {
-                SpriteBlinkingEffect();
-            }
+            // If someone collided and activated the blinking flag start blinking
+            if (m_StartBlinking) Blink();
         }
 
-        private void SpriteBlinkingEffect()
+        private void Blink()
         {
-            spriteBlinkingTotalTimer += Time.deltaTime;
-            if (spriteBlinkingTotalTimer >= spriteBlinkingTotalDuration)
+            // Add time to the counter adn if we passed the total blink duration reset the variables and enable the canvas
+            m_BlinkCounter += Time.deltaTime;
+            if (m_BlinkCounter >= m_BlinkTotalDuration)
             {
-                startBlinking = false;
-                spriteBlinkingTotalTimer = 0.0f;
+                m_StartBlinking = false;
+                m_BlinkCounter = 0.0f;
                 m_FillImage.color = Color.white;
                 m_Canvas.enabled = true;
                 return;
             }
 
-            spriteBlinkingTimer += Time.deltaTime;
-            if (spriteBlinkingTimer >= spriteBlinkingMiniDuration)
+            // This piece of code switchs between enabling and disabling canvas every blink step
+            m_BlinkCount += Time.deltaTime;
+            if (m_BlinkCount >= m_BlinkLenth)
             {
-                spriteBlinkingTimer = 0.0f;
+                m_BlinkCount = 0.0f;
                 m_Canvas.enabled = !m_Canvas.enabled;
             }
         }
-
     }
 }
