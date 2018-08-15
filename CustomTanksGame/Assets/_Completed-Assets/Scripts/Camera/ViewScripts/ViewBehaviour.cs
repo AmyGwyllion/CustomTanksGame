@@ -21,7 +21,7 @@ namespace Complete
         protected float m_ZoomSpeed;                            // Reference zoom speed for the smooth damping of the zoom
         protected float m_Size;                                 // The actual orthographic camera size
         protected float m_MaxSize;                              // The max camera size value
-        public float m_MinSize;                              // The smallest orthographic size the camera can be.
+        protected float m_MinSize;                              // The smallest orthographic size the camera can be.
 
         // The class constructor
         public ViewBehaviour(CameraControl cameraControl, Transform target) {

@@ -35,13 +35,13 @@ namespace Complete
 
         private void PointToCheckpoint()
         {
-            // First get the direction vector
+            // First get the distance
             Vector3 to = m_Checkpoints[m_Next].position;
             Vector3 from = m_Slider.transform.position;
             Vector3 distance = to - from;
             distance.Normalize();
 
-            // Then get his arc tangent and pass from radians to angles
+            // Then get his coordinates arc tangent and pass from radians to angles
             float m_Angle = (Mathf.Atan2(distance.x, distance.z) * Mathf.Rad2Deg);
 
             // Get the slider actual rotation in angles

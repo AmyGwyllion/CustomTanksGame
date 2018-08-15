@@ -9,7 +9,6 @@ namespace Complete
     {
         public float m_DampTime = 0.2f;                 // Approximate time for the camera to refocus.
         public float m_ScreenEdgeBuffer = 4f;           // Space between the top/bottom most target and the screen edge.
-        public float m_MinSize = 6.5f;                  // The smallest orthographic size the camera can be.
 
         private Transform m_Target;                     // The target we want to keep track 
         private ViewBehaviour m_Behaviour;              // The camera view behaviour

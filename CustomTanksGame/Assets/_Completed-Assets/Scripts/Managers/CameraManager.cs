@@ -14,7 +14,6 @@ namespace Complete {
         private TankManager[] m_Players;                            // All player objects in scene,                                                 populated by GameManager at START()
         private Transform[] m_PTransforms;                          // All player transforms,                                                       populated by GameManager at START()
         private List<CameraControl> m_Cameras;                      // All Cameras Controllers
-        private Dictionary<int, CameraControl> m_PlayerCamera;      // All cameras by player number
 
         private void Awake()
         {
@@ -22,7 +21,6 @@ namespace Complete {
             m_Players = new TankManager[0];
             m_PTransforms = new Transform[0];
             m_Cameras = new List<CameraControl>();
-            m_PlayerCamera = new Dictionary<int, CameraControl>();
             MaxPlayerDistance = 20.0f;
         }
 
@@ -61,7 +59,6 @@ namespace Complete {
         {
             for (int i = 0; i < m_Players.Length && i< m_Cameras.Count; i++)
             {
-                m_PlayerCamera.Add(m_Players[i].m_PlayerNumber, m_Cameras[i]);
                 m_Cameras[i].SetTarget(m_Players[i].m_Instance.transform);
             }
         }
@@ -177,9 +174,6 @@ namespace Complete {
 
             // Add the edge buffer to the size.
             size += targetCamera.m_ScreenEdgeBuffer;
-
-            // Make sure the camera's size isn't below the minimum.
-            size = Mathf.Max(size, targetCamera.m_MinSize);
 
             return size;
         }

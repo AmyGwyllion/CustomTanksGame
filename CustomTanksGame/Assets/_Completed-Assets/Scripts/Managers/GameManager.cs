@@ -223,12 +223,6 @@ namespace Complete
             }
         }
 
-        // Returns the player color
-        public Color GetPlayerColor(int playerNumber)
-        {
-            return m_PlayerByNumber[playerNumber].m_PlayerColor;
-        }
-
         // The next two functions are called once the player has been hit by a shell and we dont want to disable the tank UI too
         public void EnablePlayerMovement(int playerNumber)
         {
