@@ -63,8 +63,9 @@ namespace Complete
             float cameraRot = GetComponentInParent<CameraControl>().transform.eulerAngles.y;
 
             // Update the UI split line before normalizing the distance vector
-            // The line grows depending on the distance of the players by a 1/2 factor
-            m_SplitLine.value = Mathf.Clamp(distance.magnitude/2, m_SplitLine.minValue, m_SplitLine.maxValue);
+            // The line grows depending on the distance of the players
+            float maxPlayerDist = m_Camera.GetComponentInParent<CameraManager>().MaxPlayerDistance;
+            m_SplitLine.value = Mathf.Clamp( distance.magnitude - (maxPlayerDist/ 2), m_SplitLine.minValue, m_SplitLine.maxValue);
 
             distance.Normalize();
 
