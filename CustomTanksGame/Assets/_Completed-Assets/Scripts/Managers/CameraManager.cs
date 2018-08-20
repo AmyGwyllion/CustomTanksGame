@@ -21,7 +21,7 @@ namespace Complete {
             m_Players = new TankManager[0];
             m_PTransforms = new Transform[0];
             m_Cameras = new List<CameraControl>();
-            MaxPlayerDistance = 22.0f;
+            MaxPlayerDistance = 23.95f;
         }
 
         void Start ()
@@ -83,7 +83,10 @@ namespace Complete {
 
             // Calculate the distance between player1 one and player2 
             float dist = (P2_Target - P1_Target).magnitude;
+            Debug.Log(dist);
 
+            Debug.Log("P1_Camera: "+ P1_Camera.transform.position);
+            Debug.Log("P2_Camera: "+ P2_Camera.transform.position);
             // Check if the player2 position is inside the player1 camera viewport
             Vector3 coord = P1_Camera.WorldToViewportPoint(P2_Target);
             if ((coord.x > 0.0f && coord.x < 1.0f || coord.y > 0.0f && coord.y < 1.0f) && dist<= MaxPlayerDistance)

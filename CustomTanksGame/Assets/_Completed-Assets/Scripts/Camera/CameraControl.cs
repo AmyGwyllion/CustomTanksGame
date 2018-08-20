@@ -7,7 +7,7 @@ namespace Complete
 {
     public class CameraControl : MonoBehaviour
     {
-        public float m_DampTime = 0.2f;                 // Approximate time for the camera to refocus.
+        public float m_DampTime = 0.0f;                 // Approximate time for the camera to refocus.
 
         private Transform m_Target;                     // The target we want to keep track 
         private ViewBehaviour m_Behaviour;              // The camera view behaviour
@@ -27,7 +27,7 @@ namespace Complete
 
         private void FixedUpdate()
         {
-            // Update the actual camrea behaviour
+            // Update the actual camera behaviour
             m_Behaviour.Update(m_DampTime);
         }
 
