@@ -760,7 +760,6 @@ GameObject:
   - component: {fileID: 534701035}
   - component: {fileID: 534701038}
   - component: {fileID: 534701037}
-  - component: {fileID: 534701039}
   m_Layer: 10
   m_Name: CameraMask
   m_TagString: Untagged
@@ -823,18 +822,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 534701034}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &534701039
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 534701034}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d442693059485a240b523a269f17518f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_queues: 00000000
 --- !u!1 &575313008
 GameObject:
   m_ObjectHideFlags: 0
@@ -1431,7 +1418,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_LapsToWin: 3
   m_StartDelay: 3
-  m_EndDelay: 3
   m_CameraManager: {fileID: 761523292}
   m_MessageText: {fileID: 102963701}
   m_TankPrefab: {fileID: 1151492299287392, guid: 3bba041a66102874d8230600a0be9da1,

@@ -45,8 +45,9 @@ namespace Complete
             float desiredWidth = maxHeight / maskSize.z / 2;
             float desiredHeight = maxHeight / maskSize.x;
 
+
             // Assign the final scale
-            transform.localScale = new Vector3(desiredWidth, desiredHeight, 1);
+            transform.localScale = new Vector3(desiredWidth, desiredHeight, 1.0f);
         }
 
         // This function updates the plane mask to be facing the average position

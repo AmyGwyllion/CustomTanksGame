@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
+using UnityEngine.PostProcessing;
 using UnityEngine;
-
- /**
-  * This script is used to control al cameras in the scene
-  */
+/**
+ * This script is used to control al cameras in the scene
+ */
 namespace Complete { 
     public class CameraManager : MonoBehaviour {
 
@@ -88,25 +88,32 @@ namespace Complete {
             Vector3 coord = P1_Camera.WorldToViewportPoint(P2_Target);
             if ((coord.x > 0.0f && coord.x < 1.0f || coord.y > 0.0f && coord.y < 1.0f) && dist<= MaxPlayerDistance)
             {
-                //If player2 is inside player1 field of view change to single view camera
+                // If player2 is inside player1 field of view change to single view camera
                 if (P1_CameraRig.IsViewSplit())
                 {
-                    //Disable the second player camera
+                    // Disable the second player camera
                     P2_Camera.enabled = false;
 
+                    // Change the main camera (Player 1 camera) to single view
                     P1_CameraRig.ChangeToSingleView();
 
+                    // Enable the post processing behaviour
+                    P1_Camera.GetComponent<PostProcessingBehaviour>().enabled = true;
                 }
             }
 
-            //Else if distance is to high change to split view
+            // Else if distance is to high change to split view
             else if(dist> MaxPlayerDistance)
             {
                 if (!P1_CameraRig.IsViewSplit())
                 {
-                    //Enable player two camera and set it tos plit view
+                    // Enable player two camera and set it tos plit view
                     P2_Camera.enabled = true;
-                    
+
+                    // Disable the post processing behaviour, the cameras will interact with each other and there will be a visual difference between each other view
+                    P1_Camera.GetComponent<PostProcessingBehaviour>().enabled = false;
+
+                    // Change the cameras behaviour to split view
                     P1_CameraRig.ChangeToSplitView();
                     P2_CameraRig.ChangeToSplitView();
                 }

@@ -35,7 +35,7 @@ namespace Complete
         public void ChangeToSplitView()
         {
             // ...only if we are not already in a split behaviour!
-            if(!m_Behaviour.GetClass().Equals(ViewBehaviour.E_VIEWCLASS.Split))
+            if(!(m_Behaviour.GetClass() == ViewBehaviour.E_VIEWCLASS.Split))
                 m_Behaviour = new SplitView(this, m_Target);
         }
 
@@ -43,23 +43,24 @@ namespace Complete
         public void ChangeToSingleView()
         {
             // ...only if we are not already in a single view behaviour
-            if (!m_Behaviour.GetClass().Equals(ViewBehaviour.E_VIEWCLASS.Single))
+            if (!(m_Behaviour.GetClass() == ViewBehaviour.E_VIEWCLASS.Single))
                 m_Behaviour = new SingleView(this, m_Target);
         }
 
         // Check if this camera is on a split behaviour
         public bool IsViewSplit()
         {
-            return m_Behaviour.GetClass().Equals(ViewBehaviour.E_VIEWCLASS.Split) ? true : false;
+            return m_Behaviour.GetClass() == ViewBehaviour.E_VIEWCLASS.Split ? true : false;
         }
 
         // Set this camera target
         public void SetTarget(Transform target)
         {
             if (target != null)
+            {
                 m_Target = target;
-
-            m_Behaviour.SetTarget(target);
+                m_Behaviour.SetTarget(m_Target);
+            }
         }
 
         // Returns this camera target
