@@ -83,13 +83,8 @@ namespace Complete {
 
             // Calculate the distance between player1 one and player2 
             float dist = (P2_Target - P1_Target).magnitude;
-            Debug.Log(dist);
-
-            Debug.Log("P1_Camera: "+ P1_Camera.transform.position);
-            Debug.Log("P2_Camera: "+ P2_Camera.transform.position);
-            // Check if the player2 position is inside the player1 camera viewport
-            Vector3 coord = P1_Camera.WorldToViewportPoint(P2_Target);
-            if ((coord.x > 0.0f && coord.x < 1.0f || coord.y > 0.0f && coord.y < 1.0f) && dist<= MaxPlayerDistance)
+            
+            if (dist<= MaxPlayerDistance)
             {
                 // If player2 is inside player1 field of view change to single view camera
                 if (P1_CameraRig.IsViewSplit())
