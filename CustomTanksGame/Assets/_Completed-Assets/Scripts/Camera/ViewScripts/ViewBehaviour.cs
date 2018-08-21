@@ -103,17 +103,33 @@ namespace Complete
             }
 
             //Else if we are actually hitting a bound
-            if (CheckBotLeft(layerMask, Vector3.zero) || CheckTopRight(layerMask, Vector3.zero))
+            if (CheckBotLeft(layerMask, Vector3.zero))
             {
-                // Flip te X axis
-                target.x = -target.x;
+                Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(0, 0, m_Camera.nearClipPlane));
+                
+                target.x -= pos.x;
             }
 
-            if (CheckTopLeft(layerMask, Vector3.zero) || CheckBotRight(layerMask, Vector3.zero))
+            if (CheckTopRight(layerMask, Vector3.zero))
             {
-                // Flip the Z axis
-                target.z = -target.z;
+                Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(1, 1, m_Camera.nearClipPlane));
                 
+                target.x -= pos.x;
+            }
+
+
+            if (CheckTopLeft(layerMask, Vector3.zero))
+            {
+                Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(0, 1, m_Camera.nearClipPlane));
+
+                target.z -= pos.z;
+            }
+
+            if (CheckBotRight(layerMask, Vector3.zero))
+            {
+                Vector3 pos = m_Camera.ViewportToWorldPoint(new Vector3(1, 0, m_Camera.nearClipPlane));
+
+                target.z -= pos.z;
             }
 
         }
